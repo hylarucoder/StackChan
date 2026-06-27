@@ -275,6 +275,7 @@ public:
 
     /* --------------------------------- Network -------------------------------- */
     void startNetwork(std::function<void(std::string_view)> onLog);
+    void seedWifiCredentials();
     WifiStatus getWifiStatus();
     void startSntp();
 

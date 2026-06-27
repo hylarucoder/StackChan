@@ -180,6 +180,8 @@ void Hal::startXiaozhi()
 {
     mclog::tagInfo(_tag, "start xiaozhi");
 
+    seedWifiCredentials();
+
     auto& motion = GetStackChan().motion();
     motion.setAutoAngleSyncEnabled(true);
     motion.setAutoTorqueReleaseEnabled(true);

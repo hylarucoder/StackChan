@@ -133,6 +133,47 @@ else()
 endif()
 list(APPEND SOURCES ${BOARD_SOURCES})
 
+set(STACKCHAN_LOCAL_ENV_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../.env")
+
+function(stackchan_load_local_env ENV_FILE)
+    if(NOT EXISTS "${ENV_FILE}")
+        return()
+    endif()
+
+    file(STRINGS "${ENV_FILE}" STACKCHAN_LOCAL_ENV_LINES)
+    foreach(ENV_LINE IN LISTS STACKCHAN_LOCAL_ENV_LINES)
+        string(STRIP "${ENV_LINE}" ENV_LINE)
+        if(ENV_LINE STREQUAL "" OR ENV_LINE MATCHES "^#")
+            continue()
+        endif()
+        if(NOT ENV_LINE MATCHES "^([A-Za-z_][A-Za-z0-9_]*)=(.*)$")
+            message(WARNING "Ignoring invalid .env line: ${ENV_LINE}")
+            continue()
+        endif()
+
+        set(ENV_KEY "${CMAKE_MATCH_1}")
+        set(ENV_VALUE "${CMAKE_MATCH_2}")
+        string(STRIP "${ENV_VALUE}" ENV_VALUE)
+        if((ENV_VALUE MATCHES "^\".*\"$") OR (ENV_VALUE MATCHES "^'.*'$"))
+            string(LENGTH "${ENV_VALUE}" ENV_VALUE_LENGTH)
+            math(EXPR ENV_VALUE_LENGTH "${ENV_VALUE_LENGTH} - 2")
+            string(SUBSTRING "${ENV_VALUE}" 1 ${ENV_VALUE_LENGTH} ENV_VALUE)
+        endif()
+
+        set("STACKCHAN_ENV_${ENV_KEY}" "${ENV_VALUE}" PARENT_SCOPE)
+    endforeach()
+endfunction()
+
+function(stackchan_env_or_default ENV_KEY DEFAULT_VALUE OUT_VAR)
+    if(DEFINED STACKCHAN_ENV_${ENV_KEY})
+        set(${OUT_VAR} "${STACKCHAN_ENV_${ENV_KEY}}" PARENT_SCOPE)
+    else()
+        set(${OUT_VAR} "${DEFAULT_VALUE}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+stackchan_load_local_env("${STACKCHAN_LOCAL_ENV_FILE}")
+
 # Select audio processor according to Kconfig
 if(CONFIG_USE_AUDIO_PROCESSOR)
     list(APPEND SOURCES "${XIAOZHI_MAIN_DIR}/audio/processors/afe_audio_processor.cc")
@@ -323,9 +364,25 @@ idf_component_register(SRCS ${SOURCES}
 if(NOT BOARD_NAME)
     set(BOARD_NAME ${BOARD_TYPE})
 endif()
+stackchan_env_or_default(STACKCHAN_XIAOZHI_WS_URL "" STACKCHAN_XIAOZHI_WS_URL)
+stackchan_env_or_default(STACKCHAN_XIAOZHI_OTA_URL "" STACKCHAN_XIAOZHI_OTA_URL)
+stackchan_env_or_default(STACKCHAN_WIFI_SSID "" STACKCHAN_WIFI_SSID)
+stackchan_env_or_default(STACKCHAN_WIFI_PASSWORD "" STACKCHAN_WIFI_PASSWORD)
+set(STACKCHAN_WIFI_PRESET_ENABLE 0)
+if(NOT STACKCHAN_WIFI_SSID STREQUAL "" AND NOT STACKCHAN_WIFI_PASSWORD STREQUAL "")
+    set(STACKCHAN_WIFI_PRESET_ENABLE 1)
+endif()
+if(EXISTS "${STACKCHAN_LOCAL_ENV_FILE}")
+    message(STATUS "Loaded local StackChan firmware env from ${STACKCHAN_LOCAL_ENV_FILE}")
+endif()
 target_compile_definitions(${COMPONENT_LIB}
                     PRIVATE BOARD_TYPE=\"${BOARD_TYPE}\" BOARD_NAME=\"${BOARD_NAME}\"
                     PRIVATE BUILTIN_TEXT_FONT=${BUILTIN_TEXT_FONT} BUILTIN_ICON_FONT=${BUILTIN_ICON_FONT}
+                    PRIVATE STACKCHAN_XIAOZHI_WS_URL=\"${STACKCHAN_XIAOZHI_WS_URL}\"
+                    PRIVATE STACKCHAN_XIAOZHI_OTA_URL=\"${STACKCHAN_XIAOZHI_OTA_URL}\"
+                    PRIVATE STACKCHAN_WIFI_PRESET_ENABLE=${STACKCHAN_WIFI_PRESET_ENABLE}
+                    PRIVATE STACKCHAN_WIFI_SSID=\"${STACKCHAN_WIFI_SSID}\"
+                    PRIVATE STACKCHAN_WIFI_PASSWORD=\"${STACKCHAN_WIFI_PASSWORD}\"
                     )
 
 # Add generation rules
