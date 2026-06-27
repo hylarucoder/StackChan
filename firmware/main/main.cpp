@@ -13,6 +13,8 @@
 using namespace mooncake;
 using namespace smooth_ui_toolkit;
 
+extern "C" void start_dance_ws();
+
 extern "C" void app_main(void)
 {
     // Setup logger
@@ -25,6 +27,8 @@ extern "C" void app_main(void)
     // Setup ui hal
     ui_hal::on_delay([](uint32_t ms) { GetHAL().delay(ms); });
     ui_hal::on_get_tick([]() { return GetHAL().millis(); });
+
+    start_dance_ws();
 
     const bool skip_mooncake =
         GetHAL().getXiaozhiConfig().startAiAgentOnBoot && GetHAL().getWarmRebootTarget() < 0;
