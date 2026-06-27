@@ -1,3 +1,111 @@
+# StackChan Agora Runbook
+
+This fork runs StackChan firmware on the XiaoZhi protocol path and uses
+`agora-server` as the bridge to Agora. Before flashing firmware or expecting the
+Agent to start, check these conditions first.
+
+## Firmware Flash Conditions
+
+1. Start from the firmware directory:
+
+   ```bash
+   cd firmware
+   python3 ./fetch_repos.py
+   ```
+
+2. Use ESP-IDF 5.5.x for ESP32-S3. This project has been verified with ESP-IDF
+   5.5.3/5.5.x; ESP-IDF 6.x changes component layout and is not the target path.
+
+3. Create local firmware config in `firmware/.env`. This file is ignored by git.
+   Do not put secrets into `.env.example`.
+
+   ```bash
+   STACKCHAN_XIAOZHI_OTA_URL=http://<your-computer-lan-ip>:8000/xiaozhi/ota/
+   STACKCHAN_XIAOZHI_WS_URL=ws://<your-computer-lan-ip>:8000/ws
+   STACKCHAN_WIFI_SSID=<your-wifi-ssid>
+   STACKCHAN_WIFI_PASSWORD=<your-wifi-password>
+   ```
+
+   Use the computer's LAN IP, not `localhost`, because the device connects from
+   the Wi-Fi network.
+
+4. Build and flash:
+
+   ```bash
+   idf.py build
+   idf.py -p /dev/cu.usbmodem1101 flash
+   ```
+
+   If firmware code or assets change, flash again. The flash command writes the
+   app image and the generated `assets` partition.
+
+## Server And Agent Start Conditions
+
+1. Create server config in `agora-server/server/.env.local`. This file is ignored
+   by git.
+
+   ```bash
+   AGORA_APP_ID=<your-agora-app-id>
+   AGORA_APP_CERTIFICATE=<your-agora-app-certificate>
+   AGORA_CUSTOMER_ID=<optional-restful-api-customer-id>
+   AGORA_CUSTOMER_SECRET=<optional-restful-api-customer-secret>
+   AGENT_GREETING=
+   PORT=8000
+   ```
+
+   `AGORA_APP_ID` and `AGORA_APP_CERTIFICATE` are required. Set
+   `AGORA_CUSTOMER_ID` and `AGORA_CUSTOMER_SECRET` when Agora's control API
+   rejects Token007 auth with `401 Invalid token`.
+
+2. Start the bridge:
+
+   ```bash
+   cd agora-server/server
+   uv sync
+   uv run uvicorn stackchan_server.main:app --host 0.0.0.0 --port 8000
+   ```
+
+3. Verify the server:
+
+   ```bash
+   curl http://127.0.0.1:8000/healthz
+   curl http://127.0.0.1:8000/xiaozhi/healthz
+   ```
+
+4. The device is connected when server logs show:
+
+   ```text
+   OTA request device=... -> ws_url=ws://<host>:8000/ws
+   WS connect device=...
+   session ...: hello from device=...
+   ```
+
+5. The live Agent starts only when all of these are true:
+
+   - the server is running on the LAN IP used by firmware;
+   - the device has an active `/ws` session;
+   - `XZ_AUTO_VOICE=1` or unset, since auto voice is enabled by default;
+   - Agora credentials are valid;
+   - the host can reach Agora RTC/control services from the current network.
+
+   On first live Agent start, the Agora Python SDK may download and extract the
+   native RTC SDK. Wait for that to finish before judging startup.
+
+## Current Failure Signal
+
+If the logs show:
+
+```text
+AUTO-VOICE: start failed
+[agora] connection failure err=8
+[agora] connect timed out
+VoiceBridge: media connect failed
+```
+
+the FastAPI server and XiaoZhi WebSocket are up, but the live Agora media
+connection did not start. Treat this as an Agent/network/Agora credential path
+problem, not as a firmware flash failure.
+
 # StackChan Open-Source
 
 <img src="https://m5stack-doc.oss-cn-shenzhen.aliyuncs.com/1205/K151_stack_chan_main_pictures_01.webp" width="60%">
