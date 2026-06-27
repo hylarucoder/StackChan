@@ -8,6 +8,7 @@
 #include <mooncake.h>
 #include <mooncake_log.h>
 #include <wifi_manager.h>
+#include <ssid_manager.h>
 #include <board.h>
 #include <mutex>
 #include <queue>
@@ -15,10 +16,54 @@
 #include <ctime>
 #include <sys/time.h>
 #include <esp_sntp.h>
+#include <nvs_flash.h>
 #include <atomic>
+
+#ifndef STACKCHAN_WIFI_PRESET_ENABLE
+#define STACKCHAN_WIFI_PRESET_ENABLE 0
+#endif
+
+#ifndef STACKCHAN_WIFI_SSID
+#define STACKCHAN_WIFI_SSID ""
+#endif
+
+#ifndef STACKCHAN_WIFI_PASSWORD
+#define STACKCHAN_WIFI_PASSWORD ""
+#endif
 
 static std::string _tag           = "Network";
 static bool _is_network_connected = false;
+
+static void seed_preset_wifi_credentials()
+{
+#if STACKCHAN_WIFI_PRESET_ENABLE
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        mclog::tagWarn(_tag, "cannot seed preset WiFi credentials before NVS recovery");
+        return;
+    }
+    if (ret != ESP_OK) {
+        mclog::tagWarn(_tag, "cannot seed preset WiFi credentials: {}", esp_err_to_name(ret));
+        return;
+    }
+
+    auto& ssid_manager = SsidManager::GetInstance();
+    for (const auto& item : ssid_manager.GetSsidList()) {
+        if (item.ssid == STACKCHAN_WIFI_SSID && item.password == STACKCHAN_WIFI_PASSWORD) {
+            mclog::tagInfo(_tag, "preset WiFi credentials already present");
+            return;
+        }
+    }
+
+    ssid_manager.AddSsid(STACKCHAN_WIFI_SSID, STACKCHAN_WIFI_PASSWORD);
+    mclog::tagInfo(_tag, "preset WiFi credentials loaded from local firmware env");
+#endif
+}
+
+void Hal::seedWifiCredentials()
+{
+    seed_preset_wifi_credentials();
+}
 
 static void time_sync_notification_cb(struct timeval* tv)
 {

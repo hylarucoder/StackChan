@@ -15,6 +15,7 @@
 #include <lvgl.h>
 #include <lvgl_theme.h>
 #include <stackchan/stackchan.h>
+#include <assets/assets.h>
 #include <assets/lang_config.h>
 #include <hal/hal.h>
 
@@ -277,6 +278,32 @@ void StackChanAvatarDisplay::SetupUI()
     lv_obj_align(preview_image_, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_flag(preview_image_, LV_OBJ_FLAG_HIDDEN);
 
+    LoadKunFaces();
+    kun_face_bg_ = lv_obj_create(lv_screen_active());
+    lv_obj_set_size(kun_face_bg_, width_, height_);
+    lv_obj_align(kun_face_bg_, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_style_bg_color(kun_face_bg_, lv_color_white(), 0);
+    lv_obj_set_style_bg_opa(kun_face_bg_, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(kun_face_bg_, 0, 0);
+    lv_obj_set_style_radius(kun_face_bg_, 0, 0);
+    lv_obj_set_style_pad_all(kun_face_bg_, 0, 0);
+    lv_obj_remove_flag(kun_face_bg_, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(kun_face_bg_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(
+        kun_face_bg_,
+        [](lv_event_t*) {
+            if (hal_bridge::is_xiaozhi_ready()) {
+                hal_bridge::toggle_xiaozhi_chat_state();
+            }
+        },
+        LV_EVENT_CLICKED, nullptr);
+
+    kun_face_image_ = lv_image_create(kun_face_bg_);
+    lv_obj_center(kun_face_image_);
+    PrewarmKunFaces();
+    SetKunFace(KunFace::Idle);
+    lv_obj_move_foreground(kun_face_bg_);
+
     // GetHAL().startStackChanAutoUpdate(24);
 
     auto config        = hal_bridge::get_xiaozhi_config();
@@ -316,6 +343,59 @@ void StackChanAvatarDisplay::CreateIdleMotionModifier()
             idle_motion_modifier_id_ = stackchan.addModifier(std::make_unique<IdleMotionModifier>());
             return;
     }
+}
+
+static const char* const kKunFaceAssetNames[] = {
+    "face_01_idle.png",    "face_02_listen.png", "face_03_alert.png",
+    "face_04_puzzle.png",  "face_05_idea.png",   "face_06_speak.png",
+    "face_07_loud.png",    "face_08_dance.png",  "face_09_excited.png",
+};
+
+void StackChanAvatarDisplay::LoadKunFaces()
+{
+    if (kun_faces_loaded_) {
+        return;
+    }
+
+    for (int i = 0; i < kKunFaceCount; ++i) {
+        kun_face_assets_[i] = assets::get_image(kKunFaceAssetNames[i]);
+        if (kun_face_assets_[i].data_size == 0) {
+            ESP_LOGW(TAG, "Kun face asset missing: %s", kKunFaceAssetNames[i]);
+        }
+    }
+    kun_faces_loaded_ = true;
+}
+
+void StackChanAvatarDisplay::PrewarmKunFaces()
+{
+    if (kun_face_image_ == nullptr) {
+        return;
+    }
+
+    for (int i = 0; i < kKunFaceCount; ++i) {
+        if (kun_face_assets_[i].data_size == 0) {
+            continue;
+        }
+        lv_image_set_src(kun_face_image_, &kun_face_assets_[i]);
+        lv_refr_now(display_);
+    }
+}
+
+void StackChanAvatarDisplay::SetKunFaceIndex(int index)
+{
+    if (kun_face_image_ == nullptr || index < 0 || index >= kKunFaceCount || kun_face_assets_[index].data_size == 0) {
+        return;
+    }
+
+    lv_image_set_src(kun_face_image_, &kun_face_assets_[index]);
+    if (kun_face_bg_ != nullptr) {
+        lv_obj_move_foreground(kun_face_bg_);
+    }
+}
+
+void StackChanAvatarDisplay::SetKunFace(KunFace face)
+{
+    SetKunFaceIndex(static_cast<int>(face));
 }
 
 void StackChanAvatarDisplay::SetEmotion(const char* emotion)
@@ -488,12 +568,10 @@ void StackChanAvatarDisplay::SetStatus(const char* status)
     }
 
     auto& avatar = stackchan.avatar();
-    auto& motion = stackchan.motion();
 
     DisplayLockGuard lock(this);
 
-    bool is_idle      = false;
-    bool is_listening = false;
+    bool is_idle = false;
 
     if (strcmp(status, Lang::Strings::LISTENING) == 0) {
         if (speaking_modifier_id_ >= 0) {
@@ -503,6 +581,7 @@ void StackChanAvatarDisplay::SetStatus(const char* status)
             speaking_modifier_id_ = -1;
         }
 
+        SetKunFace(KunFace::Listen);
         GetHAL().setRgbColor(0, 0, 50, 0);
         GetHAL().refreshRgb();
 
@@ -517,6 +596,7 @@ void StackChanAvatarDisplay::SetStatus(const char* status)
         }
 
         is_idle = true;
+        SetKunFace(KunFace::Idle);
 
         GetHAL().setRgbColor(0, 0, 0, 0);
         GetHAL().refreshRgb();
@@ -526,6 +606,7 @@ void StackChanAvatarDisplay::SetStatus(const char* status)
             speaking_modifier_id_ = stackchan.addModifier(std::make_unique<SpeakingModifier>(0, 180, false));
         }
 
+        SetKunFace(KunFace::Speak);
         GetHAL().setRgbColor(0, 0, 0, 50);
         GetHAL().refreshRgb();
     } else {

@@ -18,6 +18,14 @@
 #include <assets.h>
 #include <settings.h>
 
+#ifndef STACKCHAN_XIAOZHI_WS_URL
+#define STACKCHAN_XIAOZHI_WS_URL ""
+#endif
+
+#ifndef STACKCHAN_XIAOZHI_OTA_URL
+#define STACKCHAN_XIAOZHI_OTA_URL ""
+#endif
+
 static const char* _tag = "HAL_BRIDGE";
 
 static constexpr std::string_view _xiaozhi_config_nvs_ns                           = "xiaozhi";
@@ -112,6 +120,24 @@ void xiaozhi_board_init()
 void start_xiaozhi_app()
 {
     set_xiaozhi_mode(true);
+
+    {
+        std::string ws_url = STACKCHAN_XIAOZHI_WS_URL;
+        if (!ws_url.empty()) {
+            Settings ws_settings("websocket", true);
+            ws_settings.SetString("url", ws_url);
+            ws_settings.SetString("token", "stackchan-bridge-token");
+            ws_settings.SetInt("version", 1);
+            ESP_LOGI(_tag, "seeded XiaoZhi websocket url: %s", ws_url.c_str());
+        }
+
+        std::string ota_url = STACKCHAN_XIAOZHI_OTA_URL;
+        if (!ota_url.empty()) {
+            Settings wifi_settings("wifi", true);
+            wifi_settings.SetString("ota_url", ota_url);
+            ESP_LOGI(_tag, "seeded XiaoZhi ota url: %s", ota_url.c_str());
+        }
+    }
 
     // Initialize and run the application
     auto& app = Application::GetInstance();
