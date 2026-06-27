@@ -25,6 +25,28 @@ private:
     esp_timer_handle_t preview_timer_                = nullptr;
     std::unique_ptr<LvglImage> preview_image_cached_ = nullptr;
 
+    static constexpr int kKunFaceCount = 9;
+    lv_image_dsc_t kun_face_assets_[kKunFaceCount] = {};
+    lv_obj_t* kun_face_bg_                         = nullptr;
+    lv_obj_t* kun_face_image_                      = nullptr;
+    bool kun_faces_loaded_                         = false;
+
+    enum class KunFace : int {
+        Idle = 0,
+        Listen = 1,
+        Alert = 2,
+        Puzzle = 3,
+        Idea = 4,
+        Speak = 5,
+        Loud = 6,
+        Dance = 7,
+        Excited = 8,
+    };
+
+    void LoadKunFaces();
+    void PrewarmKunFaces();
+    void SetKunFaceIndex(int index);
+    void SetKunFace(KunFace face);
     void CreateIdleMotionModifier();
 
 protected:
