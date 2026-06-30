@@ -24,12 +24,24 @@ AGORA_APP_CERTIFICATE=your_agora_app_certificate
 AGENT_GREETING=
 XZ_DEVICE_TOKEN=change_me_before_deploying
 PORT=8000
+# Dance trigger mode(s), comma-separated: keyword (default) and/or mcp.
+XZ_DANCE_TRIGGER=keyword
+# Required only with the "mcp" mode: this server's dance MCP endpoint, reachable by
+# Agora's cloud (e.g. https://your-public-host/dance-mcp/mcp).
+XZ_DANCE_MCP_URL=
 ```
 
-`AGENT_GREETING` is empty by default. Keep it empty for wake-word style behavior:
-opening/waking the agent should not automatically start a chat turn.
+`AGENT_GREETING` is the spoken self-introduction on join; it defaults to
+`Hi，我是 StackChan`. Set it empty for wake-word style behavior, where opening/waking
+the agent does not automatically start a chat turn.
 Set a unique `XZ_DEVICE_TOKEN` before exposing the service outside a local
 development network.
+
+**Dance trigger:** `XZ_DANCE_TRIGGER` selects how the robot is told to dance — `keyword`
+(server matches dance phrases in the user transcript; works on LAN, the default for local
+debugging) and/or `mcp` (the cloud ConvoAI agent calls the `dance` tool, a real LLM tool
+call, requiring `XZ_DANCE_MCP_URL` reachable by Agora's cloud). Either fires a push over
+the device's `/dance/ws` channel. See `agora-server/README.md` for the full table.
 
 ## Install
 

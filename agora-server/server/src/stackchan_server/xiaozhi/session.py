@@ -10,12 +10,18 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
 
 from . import protocol as proto
 from .mcp import McpHost
+
+# Server->device MCP discovery (initialize + tools/list). Some firmware advertises
+# mcp:true but doesn't answer; the failed handshake may also disturb the device's
+# audio pipeline. Set XZ_MCP_DISCOVERY=0 to skip it while debugging the voice path.
+MCP_DISCOVERY_ENABLED = os.getenv("XZ_MCP_DISCOVERY", "1") == "1"
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -132,7 +138,10 @@ class XzSession:
                     self.session_id, self.device_id, self.device_audio)
         self.hello_event.set()
         # MCP discovery in the background so the receive loop keeps draining replies
-        asyncio.create_task(self._discover_mcp())
+        if MCP_DISCOVERY_ENABLED:
+            asyncio.create_task(self._discover_mcp())
+        else:
+            logger.info("session %s: MCP discovery disabled (XZ_MCP_DISCOVERY=0)", self.session_id)
 
     async def _discover_mcp(self) -> None:
         try:

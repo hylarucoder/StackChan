@@ -52,9 +52,10 @@ PORT=8000
 AGENT_GREETING=
 ```
 
-Keep `AGENT_GREETING` empty for wake-word style behavior. A wake/open event should
-not automatically become a chat turn unless the demo explicitly needs a spoken
-opening line.
+`AGENT_GREETING` is the spoken self-introduction the agent says right after it joins
+the channel. It defaults to `Hi，我是 StackChan`. Set it to a different line to change
+the intro, or set it empty for wake-word style behavior where a wake/open event does
+not automatically become a chat turn.
 
 Do not assume separate ASR, LLM, or TTS vendor secrets are required unless the code introduces a custom non-managed provider path.
 

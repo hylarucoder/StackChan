@@ -4,6 +4,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   base: "./",
+  server: {
+    proxy: {
+      // dance.json / lyrics live on the Python backend; proxy the JSON endpoints
+      // so the dev server (5173) reaches them while assets stay served by Vite.
+      "/dance/json": "http://127.0.0.1:8000",
+      "/dance/lyrics": "http://127.0.0.1:8000",
+    },
+  },
   plugins: [
     {
       name: "reject-legacy-media-assets",

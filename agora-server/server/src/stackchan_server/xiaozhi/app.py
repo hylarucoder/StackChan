@@ -19,6 +19,7 @@ import json
 import logging
 import os
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI, HTTPException, Query, Request, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,6 +35,8 @@ from ..stackchan.dance_channel import (
     DanceRegistry,
     sequence_to_payload,
 )
+from ..stackchan.lyrics import CURRENT_LYRICS_PATH, load_lyrics
+from .dance_mcp import build_dance_mcp
 from .session import XzSession
 
 load_environment()
@@ -75,6 +78,15 @@ async def dance_json():
         return load_dance_json(CURRENT_DANCE_PATH)
     except (ValueError, OSError, json.JSONDecodeError) as e:
         raise HTTPException(status_code=500, detail=f"bad dance.json: {e}") from e
+
+
+@router.get("/dance/lyrics")
+async def dance_lyrics():
+    """Time-synced lyric cues for the current song; empty list when no SRT is present."""
+    try:
+        return load_lyrics(CURRENT_LYRICS_PATH)
+    except OSError as e:
+        raise HTTPException(status_code=500, detail=f"bad lyrics.srt: {e}") from e
 
 
 @router.get("/sessions")
@@ -304,6 +316,24 @@ async def _push_default_dance(device_id: str, style: str = "happy") -> dict:
     }
 
 
+async def _mcp_push_dance(style: str = "happy") -> dict:
+    """Tool-call entry point for the ConvoAI agent's `dance` MCP tool.
+
+    Pushes the current dance to the first device that has a /dance/ws channel.
+    Returns a result dict (never raises) so the model always gets a clean answer."""
+    ids = DANCE.device_ids()
+    if not ids:
+        return {"sent": False, "reason": "no dance channel connected"}
+    try:
+        return await _push_default_dance(ids[0], style)
+    except KeyError:
+        return {"sent": False, "reason": "dance channel dropped"}
+
+
+# MCP server the cloud ConvoAI agent calls (registered in agent.py llm.mcp_servers).
+DANCE_MCP = build_dance_mcp(_mcp_push_dance)
+
+
 def _pick_session(device: str | None) -> XzSession:
     if not SESSIONS:
         raise HTTPException(status_code=409, detail="no device connected")
@@ -386,8 +416,16 @@ def create_router() -> APIRouter:
     return router
 
 
+@asynccontextmanager
+async def _lifespan(_app: FastAPI):
+    # FastMCP's streamable-http session manager must run for the lifetime of the app.
+    # Starlette does not propagate lifespan to mounted sub-apps, so we drive it here.
+    async with DANCE_MCP.session_manager.run():
+        yield
+
+
 def create_app() -> FastAPI:
-    app = FastAPI(title="StackChan XiaoZhi<->Agora Bridge", version="0.1.0")
+    app = FastAPI(title="StackChan XiaoZhi<->Agora Bridge", version="0.1.0", lifespan=_lifespan)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -395,6 +433,8 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(create_router())
+    # Mounted at /dance-mcp; the tool endpoint is /dance-mcp/mcp (FastMCP default path).
+    app.mount("/dance-mcp", DANCE_MCP.streamable_http_app())
     return app
 
 

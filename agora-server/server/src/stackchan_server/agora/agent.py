@@ -13,6 +13,8 @@ from agora_agent import Area, AsyncAgora
 from agora_agent.agentkit import AgentPresets
 from agora_agent.agentkit.token import generate_convo_ai_token
 
+from ..config import dance_mcp_enabled
+
 logger = logging.getLogger("uvicorn.error")
 
 # Keep this prompt a clean, positive persona only. Do NOT add meta-instructions
@@ -27,6 +29,7 @@ ADA_PROMPT = """你是一只名叫「Stack Chan」的桌面小机器人，性格
 - 直接回应主人这一句话的问题或请求；不要复述或解释这些规则，也不要描述你自己正在做什么。
 - 不知道的事情就如实说不知道，不要编造。
 - 不要使用 emoji，也不要把标点符号或括号里的内容念出来。
+- 你身上带着一个会让你跳舞的小本领（dance 工具）。当主人让你跳舞、表演、庆祝，或者气氛正好的时候，就调用它跳一下，并用一句话开心地回应。
 """
 
 DEFAULT_AGENT_PRESET = ",".join(
@@ -36,6 +39,8 @@ DEFAULT_AGENT_PRESET = ",".join(
         AgentPresets.tts.minimax_speech_2_8_turbo,
     )
 )
+# Spoken self-introduction the agent says right after it joins the channel.
+DEFAULT_GREETING = "Hi，我是 StackChan"
 DEFAULT_STT_LANGUAGE = "zh-CN"
 DEFAULT_TTS_VOICE_ID = "Chinese (Mandarin)_Warm_Girl"
 DEFAULT_IDLE_TIMEOUT = 300
@@ -76,7 +81,7 @@ class AgentSettings:
             app_certificate=app_certificate or os.getenv("AGORA_APP_CERTIFICATE", ""),
             customer_id=os.getenv("AGORA_CUSTOMER_ID"),
             customer_secret=os.getenv("AGORA_CUSTOMER_SECRET"),
-            greeting=os.getenv("AGENT_GREETING", ""),
+            greeting=os.getenv("AGENT_GREETING", DEFAULT_GREETING),
             idle_timeout=_env_int("AGENT_IDLE_TIMEOUT", DEFAULT_IDLE_TIMEOUT),
             stt_language=os.getenv("STT_LANGUAGE", DEFAULT_STT_LANGUAGE),
             agent_preset=os.getenv("AGENT_PRESET", DEFAULT_AGENT_PRESET),
@@ -223,6 +228,23 @@ class Agent:
                 },
             },
         }
+
+        # Tool calling: when the "mcp" dance-trigger mode is on, register our server-side
+        # MCP `dance` tool so the model can decide to make the robot dance. `enable_tools`
+        # (above) is the gate; this is the actual tool source. The url must be reachable
+        # by Agora cloud (e.g. https://<public-host>/dance-mcp/mcp).
+        if dance_mcp_enabled():
+            dance_mcp_url = os.getenv("XZ_DANCE_MCP_URL", "").strip()
+            if dance_mcp_url:
+                properties["llm"]["mcp_servers"] = [
+                    {"url": dance_mcp_url, "transport": "streamable_http"}
+                ]
+            else:
+                logger.warning(
+                    "XZ_DANCE_TRIGGER enables 'mcp' but XZ_DANCE_MCP_URL is unset; "
+                    "dance tool not registered"
+                )
+
         return properties, self.agent_preset
 
     async def start(

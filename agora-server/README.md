@@ -67,10 +67,15 @@ AGORA_APP_CERTIFICATE=your_agora_app_certificate
 # rejected with "401 Invalid token"; the server then uses HTTP Basic auth.
 AGORA_CUSTOMER_ID=your_agora_customer_id
 AGORA_CUSTOMER_SECRET=your_agora_customer_secret
-# Empty by default: a wake/open event should not auto-start a chat turn.
+# Spoken intro on join. Defaults to "Hi，我是 StackChan"; set empty to disable.
 AGENT_GREETING=
 XZ_DEVICE_TOKEN=change_me_before_deploying
 PORT=8000
+# Dance trigger mode(s), comma-separated: keyword (default, local-friendly) and/or mcp.
+XZ_DANCE_TRIGGER=keyword
+# Required only when the "mcp" mode is on: this server's dance MCP endpoint, reachable
+# by Agora's cloud (e.g. https://your-public-host/dance-mcp/mcp).
+XZ_DANCE_MCP_URL=
 ```
 
 `AGORA_APP_ID` and `AGORA_APP_CERTIFICATE` are required for live Agora token generation and agent startup. The agent persona is the Mandarin-speaking Stack Chan; STT defaults to `zh-CN` and TTS to a Chinese voice (override via `STT_LANGUAGE` / `TTS_VOICE_ID`).
@@ -88,6 +93,22 @@ uv run stackchan-server
 ```
 
 The server listens on `0.0.0.0:8000` by default. Configure StackChan firmware to call the host machine's LAN IP, not `localhost`.
+
+## Dance Trigger (important)
+
+There are **two independent ways** to make the robot dance, selected by `XZ_DANCE_TRIGGER`
+(comma-separated, both may be on at once). Whichever fires, the dance is pushed to the
+device over its already-registered `/dance/ws` side-channel.
+
+| Mode | What decides | Reachability | Use when |
+| --- | --- | --- | --- |
+| `keyword` | Server matches dance phrases (`跳舞`, `奏乐`, …) in the user transcript | None — works on LAN | **Local debugging (default)** |
+| `mcp` | The cloud ConvoAI agent itself calls the `dance` tool (a real LLM tool call) | Agora's cloud must reach `XZ_DANCE_MCP_URL` over HTTP | Deployed with a public/tunneled endpoint |
+
+- **Local development: leave it at the default `keyword`** — say "跳舞" and it dances, no public endpoint needed.
+- **`mcp` mode** registers this server's MCP `dance` tool (mounted at `/dance-mcp/mcp`) into the agent's `llm.mcp_servers`. It requires `XZ_DANCE_MCP_URL` to be set to a URL Agora's cloud can reach; if the mode is on but the URL is unset, the tool is not registered (a warning is logged).
+- Use `XZ_DANCE_TRIGGER=keyword,mcp` for both, or `XZ_DANCE_TRIGGER=mcp` to run tool-call-only (avoids double triggers in production).
+- Optional: `XZ_DANCE_MCP_ALLOWED_HOSTS` (comma-separated) locks the MCP endpoint to specific `Host` headers; unset accepts any host.
 
 ## Firmware-Facing Endpoints
 

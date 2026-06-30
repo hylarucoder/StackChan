@@ -158,12 +158,117 @@
     @apply hidden;
   }
 
+  #stageWrap:fullscreen {
+    @apply aspect-auto h-screen w-screen rounded-none border-0;
+  }
+
+  .stage-tools {
+    @apply absolute right-2 top-2 z-20 flex gap-2 opacity-0 transition;
+  }
+
+  #stageWrap:hover .stage-tools,
+  #stageWrap:focus-within .stage-tools,
+  #stageWrap.is-fullscreen .stage-tools {
+    @apply opacity-100;
+  }
+
+  .stage-tool-button {
+    @apply flex h-9 w-9 items-center justify-center rounded-md border border-stack-line bg-black/45 px-0 text-sm text-white backdrop-blur transition;
+  }
+
+  .stage-tool-button.is-on {
+    border-color: var(--stage-accent, #4da3ff);
+    color: var(--stage-accent, #4da3ff);
+  }
+
+  .lyrics-overlay {
+    @apply pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 px-4 text-center;
+  }
+
+  .lyric {
+    @apply max-w-full leading-none;
+    text-shadow: 0 3px 24px rgba(0, 0, 0, 0.8);
+  }
+
+  .lyric-prev,
+  .lyric-next {
+    @apply text-lg font-semibold text-white/25 transition-all duration-300 sm:text-xl;
+  }
+
+  .lyric-idle {
+    @apply text-4xl text-white/20;
+  }
+
+  /* outer layer: beat-synced throb driven by --beat (0..1) from the rAF loop */
+  .lyric-active {
+    @apply relative whitespace-nowrap;
+    transform: scale(calc(1 + var(--beat, 0) * 0.09));
+    will-change: transform;
+  }
+
+  /* inner layer: hard slam entrance, replays on each new line via key remount */
+  .lyric-slam {
+    @apply relative inline-block text-5xl font-black tracking-tight sm:text-7xl;
+    animation: lyricSlam 0.3s cubic-bezier(0.16, 1.4, 0.3, 1) both;
+  }
+
+  .lyric-base {
+    @apply text-white;
+    opacity: calc(0.34 + var(--beat, 0) * 0.25);
+  }
+
+  .lyric-fill {
+    @apply absolute left-0 top-0 w-0 overflow-hidden whitespace-nowrap;
+    color: var(--lyric-accent, #4da3ff);
+    text-shadow:
+      0 0 calc(18px + var(--beat, 0) * 26px)
+        color-mix(in srgb, var(--lyric-accent, #4da3ff) 85%, transparent),
+      0 3px 24px rgba(0, 0, 0, 0.7);
+  }
+
+  #stageWrap:fullscreen .lyrics-overlay {
+    @apply gap-6;
+  }
+
+  #stageWrap:fullscreen .lyric-prev,
+  #stageWrap:fullscreen .lyric-next {
+    @apply text-3xl;
+  }
+
+  #stageWrap:fullscreen .lyric-slam {
+    font-size: clamp(4rem, 11vw, 10rem);
+  }
+
+  @keyframes lyricSlam {
+    0% {
+      opacity: 0;
+      transform: scale(1.55);
+      filter: blur(14px);
+    }
+    55% {
+      opacity: 1;
+      transform: scale(0.95);
+      filter: blur(0);
+    }
+    78% {
+      transform: scale(1.04);
+    }
+    100% {
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+
   .transport-bar {
     @apply mt-3 flex flex-wrap items-center gap-2;
   }
 
   .play-button {
     @apply flex h-10 w-10 items-center justify-center px-0 text-base;
+  }
+
+  .play-button.seek-button {
+    @apply w-auto px-3 text-xs font-semibold tabular-nums;
   }
 
   .beat-toggle {
@@ -227,7 +332,7 @@
   }
 
   #pad {
-    @apply relative mx-auto aspect-square w-full max-w-64 touch-none overflow-hidden rounded-lg border border-stack-line bg-[#090f17];
+    @apply relative mx-auto aspect-square w-full max-w-64 select-none touch-none overflow-hidden rounded-lg border border-stack-line bg-[#090f17];
     background-image:
       linear-gradient(rgba(77, 163, 255, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(77, 163, 255, 0.08) 1px, transparent 1px);
@@ -333,6 +438,14 @@
     @apply mb-3 flex items-center justify-between gap-3;
   }
 
+  .head-actions {
+    @apply flex items-center gap-2;
+  }
+
+  .density-select {
+    @apply rounded-md border border-stack-line bg-[#0b1119] px-2 py-1.5 text-xs text-stack-muted;
+  }
+
   tr.sel td {
     @apply bg-[rgba(255,210,63,0.08)];
   }
@@ -367,6 +480,27 @@
 
   .delay {
     @apply w-[90px];
+  }
+
+  .deploy-grid label > span:first-child {
+    @apply flex items-center justify-between;
+  }
+
+  .link-button {
+    @apply border-0 bg-transparent px-1 py-0 text-xs text-stack-muted hover:text-white;
+  }
+
+  .device-channels {
+    @apply flex flex-wrap gap-1.5 pt-1;
+  }
+
+  .device-chip {
+    @apply rounded-full border border-stack-line bg-[#0b1119] px-2.5 py-1 font-mono text-[11px] text-stack-muted transition;
+  }
+
+  .device-chip.is-on {
+    border-color: var(--stage-accent, #4da3ff);
+    @apply text-white;
   }
 }
 

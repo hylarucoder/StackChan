@@ -18,6 +18,7 @@ dependencies = [
     "agora-token-builder>=1.0.0",
     "audioop-lts>=0.2.2; python_version >= '3.13'",
     "fastapi>=0.100.0",
+    "mcp>=1.28.1",
     "numpy>=1.26",
     "opuslib>=3.0.1",
     "python-dotenv>=1.0.0",

@@ -24,12 +24,15 @@ from typing import Optional
 
 from .opus_codec import OpusCodec, FRAME_BYTES
 from ..agora.media import AgoraMedia
+from ..config import dance_keyword_enabled
 
 logger = logging.getLogger("uvicorn.error")
 
 DOWNLINK_GAP_S = 0.6   # no agent audio for this long -> end the TTS turn
 
 # M4: trigger the dance when the user says any of these (the passphrase + variants).
+# This keyword path is one of the XZ_DANCE_TRIGGER modes ("keyword"); the other is the
+# MCP tool call (agent.py llm.mcp_servers). See config.dance_trigger_modes.
 DANCE_PHRASES = ("接着奏乐接着舞", "奏乐", "跳舞", "跳个舞", "跳支舞", "dance")
 
 
@@ -172,7 +175,11 @@ class VoiceBridge:
         if "user" in who.lower() and text.strip():
             self._last_user_speech = time.monotonic()
         # M4: trigger only on the USER's words (not the agent echoing the phrase back).
-        if "user" in who.lower() and any(p.lower() in text.lower() for p in DANCE_PHRASES):
+        if (
+            dance_keyword_enabled()
+            and "user" in who.lower()
+            and any(p.lower() in text.lower() for p in DANCE_PHRASES)
+        ):
             logger.info("M4: passphrase detected in USER transcript -> dance")
             asyncio.create_task(self._safe_dance())
 

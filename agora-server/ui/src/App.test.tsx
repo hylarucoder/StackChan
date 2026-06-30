@@ -11,6 +11,15 @@ vi.mock("three", () => {
     set() {}
   }
 
+  class Color {
+    set() {
+      return this;
+    }
+    lerp() {
+      return this;
+    }
+  }
+
   class ShaderMaterial {
     uniforms: Record<string, { value: unknown }>;
 
@@ -37,6 +46,7 @@ vi.mock("three", () => {
     ShaderMaterial,
     Mesh: class {},
     Vector2,
+    Color,
   };
 });
 

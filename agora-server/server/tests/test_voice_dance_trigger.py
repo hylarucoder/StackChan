@@ -1,7 +1,9 @@
 import asyncio
 import base64
 import json
+import os
 import unittest
+from unittest import mock
 
 from stackchan_server.xiaozhi.voice_bridge import VoiceBridge
 
@@ -36,6 +38,17 @@ class VoiceDanceTriggerTest(unittest.IsolatedAsyncioTestCase):
 
         bridge._handle_transcript(transcript_frame("assistant.transcription", "接着奏乐接着舞"))
         await asyncio.sleep(0)
+
+        self.assertEqual(session.dances, [])
+
+    async def test_keyword_mode_off_does_not_trigger_dance(self):
+        # XZ_DANCE_TRIGGER without "keyword" (e.g. MCP-only): the matcher must stay silent.
+        session = _FakeSession()
+        bridge = VoiceBridge(session, asyncio.get_running_loop())
+
+        with mock.patch.dict(os.environ, {"XZ_DANCE_TRIGGER": "mcp"}):
+            bridge._handle_transcript(transcript_frame("user.transcription", "接着奏乐接着舞"))
+            await asyncio.sleep(0)
 
         self.assertEqual(session.dances, [])
 

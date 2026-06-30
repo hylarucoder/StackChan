@@ -23,15 +23,15 @@
     },
     "yawServo": {
       "angle": 0,
-      "speed": 700
+      "speed": 250
     },
     "pitchServo": {
       "angle": 0,
-      "speed": 700
+      "speed": 250
     },
-    "durationMs": 1860,
-    "leftRgbColor": "#2b6cee",
-    "rightRgbColor": "#2b6cee"
+    "durationMs": 820,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -57,15 +57,15 @@
     },
     "yawServo": {
       "angle": 0,
-      "speed": 700
+      "speed": 250
     },
     "pitchServo": {
-      "angle": -150,
-      "speed": 700
+      "angle": 0,
+      "speed": 250
     },
-    "durationMs": 2460,
-    "leftRgbColor": "#2b7fee",
-    "rightRgbColor": "#2b7fee"
+    "durationMs": 720,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -91,15 +91,559 @@
     },
     "yawServo": {
       "angle": 0,
-      "speed": 700
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 880,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 1040,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 640,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 820,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 860,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 860,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 510
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 510
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 824
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 824
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#2bee72",
+    "rightRgbColor": "#2bee72"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 250
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#2bee72",
+    "rightRgbColor": "#2bee72"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 84,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 663
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 663
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#deee2b",
+    "rightRgbColor": "#deee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 60,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 486
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 486
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#2b45ee",
+    "rightRgbColor": "#2b45ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 295
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 295
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#2b45ee",
+    "rightRgbColor": "#2b45ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 72,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 769
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 769
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#ee2bc7",
+    "rightRgbColor": "#ee2bc7"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 65,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 250
+    },
+    "durationMs": 630,
+    "leftRgbColor": "#ee2bc7",
+    "rightRgbColor": "#ee2bc7"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 528
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 528
+    },
+    "durationMs": 1130,
+    "leftRgbColor": "#ee9d2b",
+    "rightRgbColor": "#ee9d2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 84,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 648
     },
     "pitchServo": {
       "angle": 120,
-      "speed": 700
+      "speed": 648
     },
-    "durationMs": 2290,
-    "leftRgbColor": "#ee2bee",
-    "rightRgbColor": "#ee2bee"
+    "durationMs": 720,
+    "leftRgbColor": "#7f2bee",
+    "rightRgbColor": "#7f2bee"
   },
   {
     "leftEye": {
@@ -120,20 +664,2570 @@
       "x": 0,
       "y": 0,
       "rotation": 0,
-      "weight": 0,
+      "weight": 83,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -230,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#4bee2b",
+    "rightRgbColor": "#4bee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 76,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 406
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 406
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#4bee2b",
+    "rightRgbColor": "#4bee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 375
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 375
+    },
+    "durationMs": 600,
+    "leftRgbColor": "#ee2bde",
+    "rightRgbColor": "#ee2bde"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 72,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 686
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 686
+    },
+    "durationMs": 720,
+    "leftRgbColor": "#ee2bde",
+    "rightRgbColor": "#ee2bde"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 48,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 506
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 506
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#ee2bde",
+    "rightRgbColor": "#ee2bde"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 74,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 304
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 304
+    },
+    "durationMs": 700,
+    "leftRgbColor": "#9d2bee",
+    "rightRgbColor": "#9d2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 78,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -450,
+      "speed": 941
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 941
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#9d2bee",
+    "rightRgbColor": "#9d2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 388
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 388
+    },
+    "durationMs": 640,
+    "leftRgbColor": "#2e2bee",
+    "rightRgbColor": "#2e2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 380,
+      "speed": 835
+    },
+    "pitchServo": {
+      "angle": 200,
+      "speed": 835
+    },
+    "durationMs": 820,
+    "leftRgbColor": "#2e2bee",
+    "rightRgbColor": "#2e2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 417
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 417
+    },
+    "durationMs": 720,
+    "leftRgbColor": "#2e2bee",
+    "rightRgbColor": "#2e2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -230,
+      "speed": 878
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 878
+    },
+    "durationMs": 860,
+    "leftRgbColor": "#2beea6",
+    "rightRgbColor": "#2beea6"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 611
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 611
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#2beea6",
+    "rightRgbColor": "#2beea6"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 86,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 120,
+      "speed": 689
+    },
+    "pitchServo": {
+      "angle": 40,
+      "speed": 689
+    },
+    "durationMs": 1060,
+    "leftRgbColor": "#962bee",
+    "rightRgbColor": "#962bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 589
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 589
+    },
+    "durationMs": 880,
+    "leftRgbColor": "#962bee",
+    "rightRgbColor": "#962bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 500,
+    "leftRgbColor": "#962bee",
+    "rightRgbColor": "#962bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 400
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 400
+    },
+    "durationMs": 500,
+    "leftRgbColor": "#962bee",
+    "rightRgbColor": "#962bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 506
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 506
+    },
+    "durationMs": 640,
+    "leftRgbColor": "#2bb3ee",
+    "rightRgbColor": "#2bb3ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 783
+    },
+    "pitchServo": {
+      "angle": 200,
+      "speed": 783
+    },
+    "durationMs": 900,
+    "leftRgbColor": "#2bb3ee",
+    "rightRgbColor": "#2bb3ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 87,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 623
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 623
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#2bb3ee",
+    "rightRgbColor": "#2bb3ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 81,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -280,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 1000
+    },
+    "durationMs": 460,
+    "leftRgbColor": "#2b3bee",
+    "rightRgbColor": "#2b3bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 671
+    },
+    "pitchServo": {
+      "angle": -40,
+      "speed": 671
+    },
+    "durationMs": 460,
+    "leftRgbColor": "#2b3bee",
+    "rightRgbColor": "#2b3bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 559
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 559
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#2b3bee",
+    "rightRgbColor": "#2b3bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 602
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 602
+    },
+    "durationMs": 890,
+    "leftRgbColor": "#2b3bee",
+    "rightRgbColor": "#2b3bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 72,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 491
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 491
+    },
+    "durationMs": 510,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 397
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 397
+    },
+    "durationMs": 510,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -240,
+      "speed": 753
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 753
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 333
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 333
+    },
+    "durationMs": 650,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 555
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 555
+    },
+    "durationMs": 1030,
+    "leftRgbColor": "#e12bee",
+    "rightRgbColor": "#e12bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 78,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 637
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 637
+    },
+    "durationMs": 740,
+    "leftRgbColor": "#e12bee",
+    "rightRgbColor": "#e12bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 76,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -250,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 740,
+    "leftRgbColor": "#e12bee",
+    "rightRgbColor": "#e12bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 335
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 335
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#2bee55",
+    "rightRgbColor": "#2bee55"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 718
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 718
+    },
+    "durationMs": 670,
+    "leftRgbColor": "#2bee55",
+    "rightRgbColor": "#2bee55"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 76,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 517
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 517
+    },
+    "durationMs": 460,
+    "leftRgbColor": "#d1ee2b",
+    "rightRgbColor": "#d1ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 440
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 440
+    },
+    "durationMs": 860,
+    "leftRgbColor": "#d1ee2b",
+    "rightRgbColor": "#d1ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 83,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#c4ee2b",
+    "rightRgbColor": "#c4ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 406
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 406
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#c4ee2b",
+    "rightRgbColor": "#c4ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 82,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 406
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 406
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#ee3e2b",
+    "rightRgbColor": "#ee3e2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 406
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 406
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#ee3e2b",
+    "rightRgbColor": "#ee3e2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 77,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 210,
+      "speed": 679
+    },
+    "pitchServo": {
+      "angle": 90,
+      "speed": 679
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#ee3e2b",
+    "rightRgbColor": "#ee3e2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 574
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 574
+    },
+    "durationMs": 740,
+    "leftRgbColor": "#ee2ba6",
+    "rightRgbColor": "#ee2ba6"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -250,
+      "speed": 944
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 944
+    },
+    "durationMs": 800,
+    "leftRgbColor": "#5bee2b",
+    "rightRgbColor": "#5bee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 359
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 359
+    },
+    "durationMs": 600,
+    "leftRgbColor": "#ee2bbd",
+    "rightRgbColor": "#ee2bbd"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 69,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 686
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 686
+    },
+    "durationMs": 720,
+    "leftRgbColor": "#2b72ee",
+    "rightRgbColor": "#2b72ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 74,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 506
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 506
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#2b72ee",
+    "rightRgbColor": "#2b72ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 319
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 319
+    },
+    "durationMs": 540,
+    "leftRgbColor": "#2b72ee",
+    "rightRgbColor": "#2b72ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 78,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 389
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 389
+    },
+    "durationMs": 540,
+    "leftRgbColor": "#2b72ee",
+    "rightRgbColor": "#2b72ee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 82,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -270,
+      "speed": 769
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 769
+    },
+    "durationMs": 780,
+    "leftRgbColor": "#d7ee2b",
+    "rightRgbColor": "#d7ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 68,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 586
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 586
+    },
+    "durationMs": 580,
+    "leftRgbColor": "#d7ee2b",
+    "rightRgbColor": "#d7ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 72,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 80,
+      "speed": 871
+    },
+    "pitchServo": {
+      "angle": 40,
+      "speed": 871
+    },
+    "durationMs": 700,
+    "leftRgbColor": "#eed12b",
+    "rightRgbColor": "#eed12b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 594
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 594
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#eed12b",
+    "rightRgbColor": "#eed12b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 83,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 455
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 455
+    },
+    "durationMs": 800,
+    "leftRgbColor": "#eed12b",
+    "rightRgbColor": "#eed12b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 77,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 1000
+    },
+    "durationMs": 780,
+    "leftRgbColor": "#e1ee2b",
+    "rightRgbColor": "#e1ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 514
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 514
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#68ee2b",
+    "rightRgbColor": "#68ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 120,
+      "speed": 665
+    },
+    "pitchServo": {
+      "angle": 40,
+      "speed": 665
+    },
+    "durationMs": 1120,
+    "leftRgbColor": "#68ee2b",
+    "rightRgbColor": "#68ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 732
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 732
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#68ee2b",
+    "rightRgbColor": "#68ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 74,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -120,
+      "speed": 862
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 862
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#68ee2b",
+    "rightRgbColor": "#68ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 81,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 783
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 783
+    },
+    "durationMs": 560,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 85,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 60,
+      "speed": 625
+    },
+    "pitchServo": {
+      "angle": 40,
+      "speed": 625
+    },
+    "durationMs": 1120,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 85,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 702
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 702
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#ee792b",
+    "rightRgbColor": "#ee792b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -280,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 660,
+    "leftRgbColor": "#2beeb7",
+    "rightRgbColor": "#2beeb7"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 83,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 557
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 557
+    },
+    "durationMs": 630,
+    "leftRgbColor": "#2beeb7",
+    "rightRgbColor": "#2beeb7"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 130,
+      "speed": 709
+    },
+    "pitchServo": {
+      "angle": 40,
+      "speed": 709
+    },
+    "durationMs": 1030,
+    "leftRgbColor": "#2beeb7",
+    "rightRgbColor": "#2beeb7"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 76,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 810
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 810
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#ee2b9d",
+    "rightRgbColor": "#ee2b9d"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 87,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 560,
+      "speed": 538
+    },
+    "pitchServo": {
+      "angle": -40,
+      "speed": 538
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#ee2b9d",
+    "rightRgbColor": "#ee2b9d"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
       "size": 0
     },
     "yawServo": {
       "angle": -10,
-      "speed": 700
+      "speed": 959
     },
     "pitchServo": {
-      "angle": 370,
-      "speed": 700
+      "angle": 120,
+      "speed": 959
     },
-    "durationMs": 1230,
-    "leftRgbColor": "#2b68ee",
-    "rightRgbColor": "#2b68ee"
+    "durationMs": 550,
+    "leftRgbColor": "#ee2b9d",
+    "rightRgbColor": "#ee2b9d"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 929
+    },
+    "pitchServo": {
+      "angle": -40,
+      "speed": 929
+    },
+    "durationMs": 550,
+    "leftRgbColor": "#ee2b9d",
+    "rightRgbColor": "#ee2b9d"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 86,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 518
+    },
+    "pitchServo": {
+      "angle": 120,
+      "speed": 518
+    },
+    "durationMs": 560,
+    "leftRgbColor": "#2bee41",
+    "rightRgbColor": "#2bee41"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 72,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -560,
+      "speed": 518
+    },
+    "pitchServo": {
+      "angle": -40,
+      "speed": 518
+    },
+    "durationMs": 560,
+    "leftRgbColor": "#2bee41",
+    "rightRgbColor": "#2bee41"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 60,
+      "speed": 868
+    },
+    "pitchServo": {
+      "angle": 200,
+      "speed": 868
+    },
+    "durationMs": 680,
+    "leftRgbColor": "#2bee41",
+    "rightRgbColor": "#2bee41"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 77,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 450
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 450
+    },
+    "durationMs": 900,
+    "leftRgbColor": "#2bee41",
+    "rightRgbColor": "#2bee41"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 74,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#e4ee2b",
+    "rightRgbColor": "#e4ee2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 67,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 406
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 406
+    },
+    "durationMs": 480,
+    "leftRgbColor": "#2b5bee",
+    "rightRgbColor": "#2b5bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 80,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 403
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 403
+    },
+    "durationMs": 490,
+    "leftRgbColor": "#2b5bee",
+    "rightRgbColor": "#2b5bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 67,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 403
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 403
+    },
+    "durationMs": 490,
+    "leftRgbColor": "#2b5bee",
+    "rightRgbColor": "#2b5bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 220,
+      "speed": 843
+    },
+    "pitchServo": {
+      "angle": 90,
+      "speed": 843
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#2b5bee",
+    "rightRgbColor": "#2b5bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 371
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 371
+    },
+    "durationMs": 620,
+    "leftRgbColor": "#2b5bee",
+    "rightRgbColor": "#2b5bee"
   },
   {
     "leftEye": {
@@ -158,16 +3252,764 @@
       "size": 0
     },
     "yawServo": {
-      "angle": -360,
-      "speed": 275
+      "angle": 320,
+      "speed": 324
     },
     "pitchServo": {
-      "angle": 0,
-      "speed": 275
+      "angle": 50,
+      "speed": 324
     },
-    "durationMs": 2580,
-    "leftRgbColor": "#2beea3",
-    "rightRgbColor": "#2beea3"
+    "durationMs": 510,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 397
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 397
+    },
+    "durationMs": 510,
+    "leftRgbColor": "#ee2b68",
+    "rightRgbColor": "#ee2b68"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 64,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -240,
+      "speed": 685
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 685
+    },
+    "durationMs": 880,
+    "leftRgbColor": "#ee2b68",
+    "rightRgbColor": "#ee2b68"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 68,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 354
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 354
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#ee932b",
+    "rightRgbColor": "#ee932b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 69,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 591
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 591
+    },
+    "durationMs": 920,
+    "leftRgbColor": "#ee932b",
+    "rightRgbColor": "#ee932b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 491
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 491
+    },
+    "durationMs": 510,
+    "leftRgbColor": "#ee932b",
+    "rightRgbColor": "#ee932b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 397
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 397
+    },
+    "durationMs": 510,
+    "leftRgbColor": "#2bee4b",
+    "rightRgbColor": "#2bee4b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -240,
+      "speed": 972
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 972
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#2bee4b",
+    "rightRgbColor": "#2bee4b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 66,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 392
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 392
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#ee342b",
+    "rightRgbColor": "#ee342b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 77,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 392
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 392
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#ee342b",
+    "rightRgbColor": "#ee342b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 77,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 674
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 674
+    },
+    "durationMs": 740,
+    "leftRgbColor": "#ee342b",
+    "rightRgbColor": "#ee342b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 76,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 482
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 482
+    },
+    "durationMs": 530,
+    "leftRgbColor": "#ee2b65",
+    "rightRgbColor": "#ee2b65"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 75,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 295
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 295
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#ee2b65",
+    "rightRgbColor": "#ee2b65"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 79,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 1000
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#ee2b65",
+    "rightRgbColor": "#ee2b65"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 73,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 394
+    },
+    "pitchServo": {
+      "angle": -30,
+      "speed": 394
+    },
+    "durationMs": 520,
+    "leftRgbColor": "#ee2b65",
+    "rightRgbColor": "#ee2b65"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 69,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 384
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 384
+    },
+    "durationMs": 560,
+    "leftRgbColor": "#ee2b65",
+    "rightRgbColor": "#ee2b65"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 74,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 140,
+      "speed": 637
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 637
+    },
+    "durationMs": 810,
+    "leftRgbColor": "#eeca2b",
+    "rightRgbColor": "#eeca2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 70,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 458
+    },
+    "pitchServo": {
+      "angle": 10,
+      "speed": 458
+    },
+    "durationMs": 590,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 71,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 295
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 295
+    },
+    "durationMs": 840,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 67,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 856
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 856
+    },
+    "durationMs": 720,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 69,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 250
+    },
+    "durationMs": 680,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 65,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 420,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 90,
+      "speed": 1000
+    },
+    "durationMs": 600,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 68,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 333
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 333
+    },
+    "durationMs": 820,
+    "leftRgbColor": "#3b2bee",
+    "rightRgbColor": "#3b2bee"
   },
   {
     "leftEye": {
@@ -192,50 +4034,16 @@
       "size": 0
     },
     "yawServo": {
-      "angle": 390,
-      "speed": 275
+      "angle": -560,
+      "speed": 1000
     },
     "pitchServo": {
-      "angle": 0,
-      "speed": 275
+      "angle": 120,
+      "speed": 1000
     },
-    "durationMs": 2550,
-    "leftRgbColor": "#2bee65",
-    "rightRgbColor": "#2bee65"
-  },
-  {
-    "leftEye": {
-      "x": 0,
-      "y": 0,
-      "rotation": 0,
-      "weight": 100,
-      "size": 0
-    },
-    "rightEye": {
-      "x": 0,
-      "y": 0,
-      "rotation": 0,
-      "weight": 100,
-      "size": 0
-    },
-    "mouth": {
-      "x": 0,
-      "y": 0,
-      "rotation": 0,
-      "weight": 0,
-      "size": 0
-    },
-    "yawServo": {
-      "angle": 190,
-      "speed": 275
-    },
-    "pitchServo": {
-      "angle": 160,
-      "speed": 275
-    },
-    "durationMs": 1690,
-    "leftRgbColor": "#2bb7ee",
-    "rightRgbColor": "#2bb7ee"
+    "durationMs": 800,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -261,15 +4069,15 @@
     },
     "yawServo": {
       "angle": -320,
-      "speed": 275
+      "speed": 548
     },
     "pitchServo": {
-      "angle": 120,
-      "speed": 275
+      "angle": 50,
+      "speed": 548
     },
-    "durationMs": 1530,
-    "leftRgbColor": "#2bee93",
-    "rightRgbColor": "#2bee93"
+    "durationMs": 550,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -294,16 +4102,16 @@
       "size": 0
     },
     "yawServo": {
-      "angle": -380,
-      "speed": 275
+      "angle": 140,
+      "speed": 549
     },
     "pitchServo": {
       "angle": 10,
-      "speed": 275
+      "speed": 549
     },
-    "durationMs": 1270,
-    "leftRgbColor": "#2beed7",
-    "rightRgbColor": "#2beed7"
+    "durationMs": 1050,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -328,16 +4136,16 @@
       "size": 0
     },
     "yawServo": {
-      "angle": 10,
-      "speed": 700
+      "angle": 0,
+      "speed": 366
     },
     "pitchServo": {
-      "angle": 380,
-      "speed": 700
+      "angle": 0,
+      "speed": 366
     },
-    "durationMs": 1350,
-    "leftRgbColor": "#2badee",
-    "rightRgbColor": "#2badee"
+    "durationMs": 820,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -362,16 +4170,16 @@
       "size": 0
     },
     "yawServo": {
-      "angle": -210,
-      "speed": 700
+      "angle": -320,
+      "speed": 516
     },
     "pitchServo": {
-      "angle": 300,
-      "speed": 700
+      "angle": 50,
+      "speed": 516
     },
-    "durationMs": 1700,
-    "leftRgbColor": "#eb2bee",
-    "rightRgbColor": "#eb2bee"
+    "durationMs": 820,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   },
   {
     "leftEye": {
@@ -396,15 +4204,253 @@
       "size": 0
     },
     "yawServo": {
-      "angle": 200,
-      "speed": 700
+      "angle": -320,
+      "speed": 250
     },
     "pitchServo": {
-      "angle": 300,
-      "speed": 700
+      "angle": 50,
+      "speed": 250
     },
-    "durationMs": 69490,
-    "leftRgbColor": "#2bee2b",
-    "rightRgbColor": "#2bee2b"
+    "durationMs": 600,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 340,
+      "speed": 1000
+    },
+    "pitchServo": {
+      "angle": 90,
+      "speed": 1000
+    },
+    "durationMs": 600,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 320,
+      "speed": 299
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 299
+    },
+    "durationMs": 760,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": -320,
+      "speed": 892
+    },
+    "pitchServo": {
+      "angle": 50,
+      "speed": 892
+    },
+    "durationMs": 680,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 516
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 516
+    },
+    "durationMs": 820,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 420,
+      "speed": 648
+    },
+    "pitchServo": {
+      "angle": 90,
+      "speed": 648
+    },
+    "durationMs": 720,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 617
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 617
+    },
+    "durationMs": 780,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
+  },
+  {
+    "leftEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "rightEye": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 100,
+      "size": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "weight": 0,
+      "size": 0
+    },
+    "yawServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "pitchServo": {
+      "angle": 0,
+      "speed": 250
+    },
+    "durationMs": 1020,
+    "leftRgbColor": "#ee6c2b",
+    "rightRgbColor": "#ee6c2b"
   }
 ]

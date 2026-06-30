@@ -53,7 +53,7 @@ class AgentConfigTest(unittest.TestCase):
 
         self.assertEqual(settings.idle_timeout, 300)
 
-    def test_default_greeting_is_empty_so_wake_does_not_start_chat(self):
+    def test_default_greeting_is_stackchan_intro(self):
         original = os.environ.pop("AGENT_GREETING", None)
         try:
             agent = Agent()
@@ -61,7 +61,7 @@ class AgentConfigTest(unittest.TestCase):
             if original is not None:
                 os.environ["AGENT_GREETING"] = original
 
-        self.assertEqual(agent.greeting, "")
+        self.assertEqual(agent.greeting, "Hi，我是 StackChan")
 
     def test_default_idle_timeout_keeps_multi_turn_session_open(self):
         original = os.environ.pop("AGENT_IDLE_TIMEOUT", None)

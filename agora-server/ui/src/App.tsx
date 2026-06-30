@@ -10,11 +10,15 @@ import {
 } from "react";
 import * as THREE from "three";
 
+import { LyricsOverlay, type LyricCue } from "./LyricsOverlay";
 import {
+  type AutoMarkDensity,
   DanceFrame,
   Keyframe,
+  autoChoreograph,
   buildSequence,
   clamp,
+  simplifyKeyframes,
   keyframesFromSequence,
   makeKeyframe,
   randColor,
@@ -63,16 +67,23 @@ export function App() {
   const [status, setStatus] = useState("");
   const [randomColors, setRandomColors] = useState(true);
   const [beatsVisible, setBeatsVisible] = useState(true);
+  const [snapBeat, setSnapBeat] = useState(true);
+  const [markDensity, setMarkDensity] = useState<AutoMarkDensity>("bar");
   const [bridge, setBridge] = useState("http://127.0.0.1:8000");
   const [device, setDevice] = useState("stackchan-1");
+  const [danceChannels, setDanceChannels] = useState<string[]>([]);
   const [playDelay, setPlayDelay] = useState(200);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [lyrics, setLyrics] = useState<LyricCue[]>([]);
+  const [showLyrics, setShowLyrics] = useState(true);
   const [activeTab, setActiveTab] = useState<WorkbenchTab>("frames");
 
   const videoRef = useRef<HTMLAudioElement | null>(null);
   const stageRef = useRef<HTMLCanvasElement | null>(null);
+  const stageWrapRef = useRef<HTMLDivElement | null>(null);
   const faceRef = useRef<HTMLCanvasElement | null>(null);
   const padRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLDivElement | null>(null);
@@ -88,11 +99,19 @@ export function App() {
   });
   const decodeCtxRef = useRef<AudioContext | null>(null);
   const monoPeaksRef = useRef<Float32Array | null>(null);
+  const accentColorRef = useRef("#4da3ff");
+  const playColorsRef = useRef<{ t: number; hex: string }[]>([]);
+  const scratchColorRef = useRef(new THREE.Color("#4da3ff"));
   const beatsRef = useRef<number[]>([]);
+  const lastBeatIdxRef = useRef(-1);
+  const sceneRef = useRef(0);
+  const isPlayingRef = useRef(false);
+  const clockRef = useRef({ t: 0, last: null as number | null });
 
   const sequence = useMemo(() => buildSequence(keyframes, duration), [keyframes, duration]);
   const selectedKeyframe = selected >= 0 ? keyframes[selected] : null;
   const accentColor = selectedKeyframe?.color || pose.color;
+  accentColorRef.current = accentColor;
 
   const setSequenceEditor = useCallback((next: DanceFrame[]) => {
     setDanceJson(sequenceText(next));
@@ -281,8 +300,8 @@ export function App() {
       audio.ctx = new AudioCtor();
       audio.source = audio.ctx.createMediaElementSource(video);
       audio.analyser = audio.ctx.createAnalyser();
-      audio.analyser.fftSize = 256;
-      audio.analyser.smoothingTimeConstant = 0.8;
+      audio.analyser.fftSize = 2048;
+      audio.analyser.smoothingTimeConstant = 0.82;
       audio.source.connect(audio.analyser);
       audio.analyser.connect(audio.ctx.destination);
       audio.freqData = new Uint8Array(audio.analyser.frequencyBinCount);
@@ -362,29 +381,93 @@ export function App() {
           u_mid: { value: 0 },
           u_treble: { value: 0 },
           u_level: { value: 0 },
+          u_beat: { value: 0 },
+          u_scene: { value: 0 },
+          u_accent: { value: new THREE.Color(0x4da3ff) },
         },
         vertexShader: "void main(){ gl_Position=vec4(position.xy,0.0,1.0); }",
         fragmentShader: `
 precision highp float;
 uniform vec2 u_res; uniform float u_time;
 uniform float u_bass, u_mid, u_treble, u_level;
-const vec3 accent = vec3(0.302,0.639,1.0);
-const vec3 hot    = vec3(1.0,0.365,0.451);
+uniform float u_beat, u_scene;
+uniform vec3 u_accent;
+
+const float PI = 3.14159265359;
+
+mat2 rot(float a){ float s=sin(a), c=cos(a); return mat2(c,-s,s,c); }
+
+float hash(vec2 p){
+  p = fract(p*vec2(123.34, 345.45));
+  p += dot(p, p+34.345);
+  return fract(p.x*p.y);
+}
+float noise(vec2 p){
+  vec2 i = floor(p); vec2 f = fract(p);
+  vec2 u = f*f*(3.0-2.0*f);
+  float a = hash(i), b = hash(i+vec2(1.0,0.0));
+  float c = hash(i+vec2(0.0,1.0)), d = hash(i+vec2(1.0,1.0));
+  return mix(mix(a,b,u.x), mix(c,d,u.x), u.y);
+}
+
+// signed distance to a regular n-gon, radius r
+float ngon(vec2 p, float n, float r){
+  float a = atan(p.x, p.y);
+  float seg = 2.0*PI/n;
+  return cos(floor(0.5 + a/seg)*seg - a) * length(p) - r;
+}
+
 void main(){
   vec2 uv = (gl_FragCoord.xy - 0.5*u_res)/u_res.y;
-  float r = length(uv);
-  float ang = atan(uv.y, uv.x);
-  vec3 col = vec3(0.02,0.03,0.05);
-  vec2 gf = fract(uv*8.0); vec2 gd = min(gf, 1.0-gf);
-  col += accent * smoothstep(0.045,0.0,min(gd.x,gd.y)) * 0.05;
-  float rings = sin(r*22.0 - u_time*2.5 - u_bass*6.0);
-  col += accent * smoothstep(0.6,1.0,rings)*exp(-r*1.5) * (0.3 + u_bass*1.7);
-  float core = exp(-r*r*(12.0 - u_bass*8.0));
-  col += mix(accent,hot,clamp(u_treble,0.0,1.0)) * core * (0.5 + u_level*2.2);
-  col += hot * (0.5+0.5*sin(ang*12.0 + u_time*1.5)) * u_treble * exp(-r*2.5) * 0.7;
-  col += accent*0.15*u_mid * exp(-abs(r-0.5-0.1*sin(u_time))*8.0);
-  col *= 1.0 - 0.4*r;
-  gl_FragColor = vec4(col,1.0);
+  float d0 = length(uv);
+
+  vec3 accent = u_accent;
+  vec3 hot    = clamp(u_accent.gbr*1.15 + vec3(0.28,0.04,0.12), 0.0, 1.0);
+  vec3 col    = vec3(0.012,0.018,0.038);
+
+  // global spin, kicked on every beat
+  vec2 p = rot(u_time*0.12 + u_beat*0.40) * uv;
+
+  // ---- kaleidoscope fold; symmetry steps with the beat scene ----
+  float folds = 6.0 + mod(floor(u_scene*0.5), 4.0)*2.0;  // 6 / 8 / 10 / 12
+  float ang = atan(p.y, p.x);
+  float rad = length(p);
+  float seg = 2.0*PI/folds;
+  ang = abs(mod(ang + seg*0.5, seg) - seg*0.5);
+  vec2 kp = vec2(cos(ang), sin(ang)) * rad;
+
+  // morphing polygon side count, also stepping per beat
+  float n = 3.0 + mod(u_scene, 5.0);                     // 3..7 sides
+
+  // layer 1 — kaleidoscope grid lattice (treble)
+  vec2 g = kp * (5.0 + u_treble*5.0) + u_time*0.2;
+  vec2 gf = abs(fract(g) - 0.5);
+  float grid = smoothstep(0.44, 0.5, max(gf.x, gf.y));
+  col += accent * grid * (0.10 + u_treble*0.7);
+
+  // layer 2 — concentric morphing polygon ring (mid)
+  float ring = ngon(kp, n, 0.30 + 0.10*sin(u_time + rad*4.0));
+  col += mix(accent, hot, u_treble) * smoothstep(0.012, 0.0, abs(ring))
+       * (0.5 + u_mid*1.3);
+
+  // layer 3 — rotating radial bars (bass + beat)
+  float bars = abs(sin(ang*folds*0.5 + u_time*2.2));
+  col += hot * smoothstep(0.82, 1.0, bars) * exp(-rad*1.6)
+       * (0.18 + u_bass*1.4 + u_beat*0.9);
+
+  // center polygon core, snaps & flips color on the beat
+  float core = ngon(rot(u_beat*0.8)*p, n, 0.10 + u_bass*0.10 + u_beat*0.07);
+  col += mix(accent, hot, u_beat) * smoothstep(0.045, 0.0, core)
+       * (0.6 + u_level*1.5 + u_beat*1.3);
+
+  // beat flash lights up the whole lattice
+  col += accent * u_beat * 0.18 * (grid + 0.3);
+
+  col *= 0.82 + 0.4*u_level;
+  col *= smoothstep(1.4, 0.12, d0);                      // vignette
+  col += (hash(gl_FragCoord.xy + fract(u_time)) - 0.5)/255.0;  // anti-banding
+
+  gl_FragColor = vec4(col, 1.0);
 }`,
       });
       scene.add(new THREE.Mesh(geometry, material));
@@ -399,15 +482,58 @@ void main(){
     (timestamp: number) => {
       const state = threeRef.current;
       if (state) {
-        if (state.t0 === null) state.t0 = timestamp;
+        // advance the animation clock only while playing -> still when idle
+        const clock = clockRef.current;
+        if (clock.last === null) clock.last = timestamp;
+        if (isPlayingRef.current) clock.t += timestamp - clock.last;
+        clock.last = timestamp;
         resizeThree();
         readBands();
         if (stageRef.current && stageRef.current.width > 0) {
-          state.material.uniforms.u_time.value = (timestamp - state.t0) / 1000;
+          state.material.uniforms.u_time.value = clock.t / 1000;
           state.material.uniforms.u_bass.value = audioRef.current.smooth.bass;
           state.material.uniforms.u_mid.value = audioRef.current.smooth.mid;
           state.material.uniforms.u_treble.value = audioRef.current.smooth.treble;
           state.material.uniforms.u_level.value = audioRef.current.smooth.level;
+
+          // beat envelope + per-beat scene stepping -> geometry changes on the rhythm
+          const beats = beatsRef.current;
+          const playhead = videoRef.current?.currentTime ?? 0;
+          let idx = -1;
+          for (let i = 0; i < beats.length; i += 1) {
+            if (beats[i] <= playhead + 1e-3) idx = i;
+            else break;
+          }
+          if (idx > lastBeatIdxRef.current) {
+            sceneRef.current += idx - lastBeatIdxRef.current;
+          }
+          lastBeatIdxRef.current = idx;
+          const beatPulse = idx >= 0 ? Math.exp(-(playhead - beats[idx]) * 6.5) : 0;
+          state.material.uniforms.u_beat.value = beatPulse;
+          state.material.uniforms.u_scene.value = sceneRef.current;
+
+          // accent tracks the dance: while playing, the keyframe color active at
+          // the playhead; otherwise the keyframe being edited. Lerp for a smooth fade.
+          let targetHex = accentColorRef.current;
+          const colors = playColorsRef.current;
+          if (isPlayingRef.current && colors.length > 0) {
+            let active = colors[0].hex;
+            for (let i = 0; i < colors.length; i += 1) {
+              if (colors[i].t <= playhead) active = colors[i].hex;
+              else break;
+            }
+            targetHex = active;
+          }
+          try {
+            scratchColorRef.current.set(targetHex);
+            (state.material.uniforms.u_accent.value as THREE.Color).lerp(
+              scratchColorRef.current,
+              0.08,
+            );
+          } catch {
+            /* invalid color string — keep previous accent */
+          }
+
           state.renderer.render(state.scene, state.camera);
         }
       }
@@ -442,6 +568,38 @@ void main(){
   }, [drawWave, initThree, loop, resizeThree]);
 
   useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  const toggleFullscreen = useCallback(() => {
+    const wrap = stageWrapRef.current;
+    if (!wrap) return;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    } else {
+      void wrap.requestFullscreen?.();
+    }
+  }, []);
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement === stageWrapRef.current);
+      // canvas client size changes on the next frame; nudge the renderer.
+      requestAnimationFrame(() => resizeThree());
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, [resizeThree]);
+
+  useEffect(() => {
+    // time-sorted keyframe colors; the render loop samples this at the playhead
+    // so the shader tracks the dance's color as it plays.
+    playColorsRef.current = keyframes
+      .filter((keyframe) => Boolean(keyframe.color))
+      .map((keyframe) => ({ t: keyframe.t, hex: keyframe.color }));
+  }, [keyframes]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
@@ -469,6 +627,19 @@ void main(){
     void loadDance();
   }, [setSequenceEditor]);
 
+  useEffect(() => {
+    const loadLyrics = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/dance/lyrics`);
+        if (!response.ok) throw new Error(await response.text());
+        setLyrics((await response.json()) as LyricCue[]);
+      } catch {
+        setLyrics([]);
+      }
+    };
+    void loadLyrics();
+  }, []);
+
   const updatePose = (patch: Partial<Pose>) => {
     setPose((prev) => ({ ...prev, ...patch }));
   };
@@ -485,12 +656,37 @@ void main(){
     });
   };
 
+  const seekBy = (delta: number) => {
+    const video = videoRef.current;
+    if (!video) return;
+    const max = video.duration || duration || Number.POSITIVE_INFINITY;
+    video.currentTime = clamp(video.currentTime + delta, 0, max);
+  };
+
+  // snap a time to the nearest detected beat within a window, so keyframes land
+  // on the rhythm instead of requiring pixel-perfect scrubbing.
+  const nearestBeatTime = (t: number, window = 0.4): number => {
+    const beats = beatsRef.current;
+    if (!snapBeat || beats.length === 0) return t;
+    let best = t;
+    let bestDist = Number.POSITIVE_INFINITY;
+    for (const beat of beats) {
+      const dist = Math.abs(beat - t);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = beat;
+      }
+      if (beat > t + window) break; // beats are sorted ascending
+    }
+    return bestDist <= window ? best : t;
+  };
+
   const addKeyframe = () => {
     const video = videoRef.current;
     const next = makeKeyframe({
       ...pose,
       color: randomColors ? randColor() : pose.color,
-      t: Number((video?.currentTime || 0).toFixed(2)),
+      t: Number(nearestBeatTime(video?.currentTime || 0).toFixed(2)),
     });
     const nextKeyframes = sortKeyframes([...keyframes, next]);
     const nextSelected = nextKeyframes.indexOf(next);
@@ -539,6 +735,31 @@ void main(){
     }
   };
 
+  const gotoKeyframe = (direction: -1 | 1) => {
+    if (keyframes.length === 0) return;
+    const t = videoRef.current?.currentTime ?? 0;
+    const eps = 0.05;
+    let target = -1;
+    if (direction < 0) {
+      for (let i = keyframes.length - 1; i >= 0; i -= 1) {
+        if (keyframes[i].t < t - eps) {
+          target = i;
+          break;
+        }
+      }
+      if (target < 0) target = 0; // already at/before the first frame
+    } else {
+      for (let i = 0; i < keyframes.length; i += 1) {
+        if (keyframes[i].t > t + eps) {
+          target = i;
+          break;
+        }
+      }
+      if (target < 0) target = keyframes.length - 1; // already at/after the last frame
+    }
+    selectKeyframe(target, true);
+  };
+
   const deleteKeyframe = (index: number) => {
     const nextKeyframes = keyframes.filter((_, keyframeIndex) => keyframeIndex !== index);
     const nextSelected = selected >= nextKeyframes.length ? nextKeyframes.length - 1 : selected;
@@ -552,6 +773,50 @@ void main(){
     setKeyframes([]);
     setSelected(-1);
     setSequenceEditor([]);
+  };
+
+  const autoMark = () => {
+    const beats = beatsRef.current;
+    if (beats.length === 0 && lyrics.length === 0) {
+      setStatus("还没有可用的节拍/歌词分析，先载入并播放一次音频");
+      return;
+    }
+    if (keyframes.length > 0 && !confirm(`用节拍+歌词自动生成关键帧，覆盖现有 ${keyframes.length} 帧?`)) {
+      return;
+    }
+    const generated = autoChoreograph({
+      beats,
+      lyrics: lyrics.map((cue) => ({ start: cue.start, end: cue.end })),
+      duration: videoRef.current?.duration || duration,
+      peaks: monoPeaksRef.current ?? undefined,
+      randColor: randColor,
+      density: markDensity,
+    });
+    if (generated.length === 0) {
+      setStatus("自动打标没有生成关键帧");
+      return;
+    }
+    setKeyframes(generated);
+    setSelected(-1);
+    syncEditorFromKeyframes(generated, videoRef.current?.duration || duration);
+    setStatus(`自动打标完成: ${generated.length} 帧（节拍 ${beats.length} · 歌词 ${lyrics.length}）`);
+  };
+
+  const simplify = () => {
+    if (keyframes.length <= 2) {
+      setStatus("关键帧太少，无需精简");
+      return;
+    }
+    const next = simplifyKeyframes(keyframes);
+    const removed = keyframes.length - next.length;
+    if (removed === 0) {
+      setStatus(`已是最简（${next.length} 帧）`);
+      return;
+    }
+    setKeyframes(next);
+    setSelected(-1);
+    syncEditorFromKeyframes(next);
+    setStatus(`精简完成: 删除 ${removed} 帧，剩 ${next.length}`);
   };
 
   const exportDance = () => {
@@ -682,6 +947,58 @@ void main(){
     }
   };
 
+  const togglePlayRef = useRef(togglePlay);
+  togglePlayRef.current = togglePlay;
+  const gotoKeyframeRef = useRef(gotoKeyframe);
+  gotoKeyframeRef.current = gotoKeyframe;
+  const seekByRef = useRef(seekBy);
+  seekByRef.current = seekBy;
+
+  const refreshChannels = useCallback(async () => {
+    try {
+      const response = await fetch(`${bridge.replace(/\/$/, "")}/xiaozhi/healthz`);
+      if (!response.ok) return;
+      const data = (await response.json()) as { dance_channels?: string[] };
+      const ids = Array.isArray(data.dance_channels) ? data.dance_channels : [];
+      setDanceChannels(ids);
+      // auto-target a connected device when the typed id isn't on a dance channel.
+      setDevice((current) => (ids.length > 0 && !ids.includes(current) ? ids[0] : current));
+    } catch {
+      setDanceChannels([]);
+    }
+  }, [bridge]);
+
+  useEffect(() => {
+    void refreshChannels();
+  }, [refreshChannels]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isSpace = event.code === "Space" || event.key === " ";
+      const isPrev = event.key === "ArrowLeft";
+      const isNext = event.key === "ArrowRight";
+      const isFwd = event.key === "ArrowUp";
+      const isBack = event.key === "ArrowDown";
+      if (!isSpace && !isPrev && !isNext && !isFwd && !isBack) return;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      // don't hijack shortcuts while typing in inputs / editors / buttons.
+      if (
+        target &&
+        (target.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(target.tagName))
+      ) {
+        return;
+      }
+      event.preventDefault();
+      if (isSpace) void togglePlayRef.current();
+      else if (isPrev || isNext) gotoKeyframeRef.current(isPrev ? -1 : 1);
+      else seekByRef.current(isFwd ? 5 : -5);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   const dotStyle = {
     left: `${((90 - pose.yaw) / 180) * 100}%`,
     top: `${((40 - pose.pitch) / 80) * 100}%`,
@@ -725,8 +1042,43 @@ void main(){
             </div>
             <span className="time-pill">{currentTime.toFixed(2)} / {duration ? duration.toFixed(2) : "0.00"}s</span>
           </div>
-          <div id="stageWrap" style={{ "--stage-accent": accentColor } as React.CSSProperties}>
+          <div
+            id="stageWrap"
+            ref={stageWrapRef}
+            className={isFullscreen ? "is-fullscreen" : undefined}
+            style={{ "--stage-accent": accentColor } as React.CSSProperties}
+          >
             <canvas ref={stageRef} id="stage" />
+            <LyricsOverlay
+              audioRef={videoRef}
+              beatsRef={beatsRef}
+              cues={lyrics}
+              accentColor={accentColor}
+              visible={showLyrics}
+            />
+            <div className="stage-tools">
+              {lyrics.length > 0 && (
+                <button
+                  type="button"
+                  className={`stage-tool-button${showLyrics ? " is-on" : ""}`}
+                  title={showLyrics ? "隐藏歌词" : "显示歌词"}
+                  aria-label={showLyrics ? "隐藏歌词" : "显示歌词"}
+                  aria-pressed={showLyrics}
+                  onClick={() => setShowLyrics((value) => !value)}
+                >
+                  词
+                </button>
+              )}
+              <button
+                type="button"
+                className="stage-tool-button"
+                title={isFullscreen ? "退出全屏" : "全屏背景舞台"}
+                aria-label={isFullscreen ? "退出全屏" : "全屏背景舞台"}
+                onClick={toggleFullscreen}
+              >
+                {isFullscreen ? "✕" : "⛶"}
+              </button>
+            </div>
             <audio
               ref={videoRef}
               id="audio"
@@ -742,8 +1094,46 @@ void main(){
             />
           </div>
           <div className="transport-bar">
-            <button type="button" className="play-button" title="播放 / 暂停" onClick={togglePlay}>
+            <button
+              type="button"
+              className="play-button seek-button"
+              title="后退 5 秒 (↓)"
+              aria-label="后退 5 秒"
+              onClick={() => seekBy(-5)}
+            >
+              -5s
+            </button>
+            <button
+              type="button"
+              className="play-button"
+              title="上一个关键帧 (←)"
+              aria-label="上一个关键帧"
+              disabled={keyframes.length === 0}
+              onClick={() => gotoKeyframe(-1)}
+            >
+              ⏮
+            </button>
+            <button type="button" className="play-button" title="播放 / 暂停 (空格)" onClick={togglePlay}>
               {isPlaying ? "⏸" : "▶︎"}
+            </button>
+            <button
+              type="button"
+              className="play-button"
+              title="下一个关键帧 (→)"
+              aria-label="下一个关键帧"
+              disabled={keyframes.length === 0}
+              onClick={() => gotoKeyframe(1)}
+            >
+              ⏭
+            </button>
+            <button
+              type="button"
+              className="play-button seek-button"
+              title="前进 5 秒 (↑)"
+              aria-label="前进 5 秒"
+              onClick={() => seekBy(5)}
+            >
+              +5s
             </button>
             <button type="button" className="primary" onClick={addKeyframe}>
               ＋ 打关键帧
@@ -752,6 +1142,14 @@ void main(){
               ⟳ 更新选中帧
             </button>
             <span className="spacer" />
+            <label className="beat-toggle" title="打点时吸附到最近的节拍">
+              <input
+                type="checkbox"
+                checked={snapBeat}
+                onChange={(event) => setSnapBeat(event.target.checked)}
+              />
+              吸附节拍
+            </label>
             <label className="beat-toggle">
               <input
                 type="checkbox"
@@ -884,9 +1282,27 @@ void main(){
               <div className="tab-panel" role="tabpanel">
                 <div className="workbench-head">
                   <h2>关键帧 ({keyframes.length})</h2>
-                  <button type="button" onClick={clearKeyframes}>
-                    清空
-                  </button>
+                  <div className="head-actions">
+                    <select
+                      className="density-select"
+                      value={markDensity}
+                      title="自动打标密度"
+                      onChange={(event) => setMarkDensity(event.target.value as AutoMarkDensity)}
+                    >
+                      <option value="bar">每小节(稳)</option>
+                      <option value="half">每2拍(活泼)</option>
+                      <option value="phrase">每乐句(跟词)</option>
+                    </select>
+                    <button type="button" className="primary" onClick={autoMark} title="用节拍+歌词自动生成一版关键帧">
+                      ✨ 自动打标
+                    </button>
+                    <button type="button" onClick={simplify} title="Douglas-Peucker 精简：删掉多余关键帧">
+                      🗜 精简
+                    </button>
+                    <button type="button" onClick={clearKeyframes}>
+                      清空
+                    </button>
+                  </div>
                 </div>
                 <table aria-label="关键帧列表">
                   <thead>
@@ -965,13 +1381,40 @@ void main(){
                     />
                   </label>
                   <label>
-                    <span>Device</span>
+                    <span>
+                      Device
+                      <button
+                        type="button"
+                        className="link-button"
+                        title="刷新已连接设备"
+                        onClick={() => void refreshChannels()}
+                      >
+                        ⟳ 刷新
+                      </button>
+                    </span>
                     <input
                       type="text"
                       value={device}
                       title="deviceId"
                       onChange={(event) => setDevice(event.target.value)}
                     />
+                    <span className="device-channels">
+                      {danceChannels.length === 0 ? (
+                        <span className="muted">无已连接舞蹈通道</span>
+                      ) : (
+                        danceChannels.map((id) => (
+                          <button
+                            type="button"
+                            key={id}
+                            className={`device-chip${id === device ? " is-on" : ""}`}
+                            title={`选择 ${id}`}
+                            onClick={() => setDevice(id)}
+                          >
+                            {id}
+                          </button>
+                        ))
+                      )}
+                    </span>
                   </label>
                   <label>
                     <span>播放延迟</span>
