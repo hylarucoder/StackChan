@@ -180,8 +180,14 @@ class Agent:
             "enable_string_uid": False,
             "advanced_features": {"enable_rtm": True, "enable_tools": True},
             "parameters": parameters,
+            # turn_detection: the detailed `config` is only applied when `mode` is
+            # "default" (the documented switch). Without it the API ignores the block and
+            # falls back to a server default that never fires end-of-speech here, so the
+            # agent listens forever and never replies. There is NO `language` field on
+            # turn_detection (language lives in asr.params, set below); a stray key here
+            # is silently dropped.
             "turn_detection": {
-                "language": self.stt_language,
+                "mode": "default",
                 "config": {
                     "speech_threshold": 0.6,
                     "start_of_speech": {
@@ -196,7 +202,10 @@ class Agent:
                     "end_of_speech": {
                         "mode": "vad",
                         "vad_config": {
-                            "silence_duration_ms": 480,
+                            # How long the user must be silent before the turn is considered
+                            # done. Tune via XZ_EOS_SILENCE_MS (lower = snappier but may cut
+                            # off mid-sentence pauses; higher = waits longer before replying).
+                            "silence_duration_ms": _env_int("XZ_EOS_SILENCE_MS", 480),
                         },
                     },
                 },

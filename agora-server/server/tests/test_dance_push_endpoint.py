@@ -121,5 +121,55 @@ class DancePushEndpointTest(unittest.TestCase):
             self.assertEqual(resp.status_code, 400)
 
 
+class _FakeVoice:
+    def __init__(self, events: list[str]):
+        self.events = events
+
+    async def stop(self):
+        self.events.append("voice-stopped")
+
+
+class _FakeSession:
+    def __init__(self, voice):
+        self.session_id = "session-dance-voice"
+        self.voice = voice
+
+
+class _FakeDanceWs:
+    def __init__(self, events: list[str]):
+        self.events = events
+
+    async def send_bytes(self, data: bytes) -> None:
+        self.events.append("dance-pushed")
+
+
+class DanceVoiceCoordinationTest(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.old_path = xz_app.CURRENT_DANCE_PATH
+        xz_app.CURRENT_DANCE_PATH = Path(self.tmp.name) / "dance.json"
+        xz_app.CURRENT_DANCE_PATH.write_text(json.dumps(SAMPLE), encoding="utf-8")
+
+    def tearDown(self):
+        xz_app.CURRENT_DANCE_PATH = self.old_path
+        xz_app.SESSIONS.pop("dev-dance-voice", None)
+        ws = xz_app.DANCE.get("dev-dance-voice")
+        if ws is not None:
+            xz_app.DANCE.unregister("dev-dance-voice", ws)
+        self.tmp.cleanup()
+
+    async def test_dance_push_stops_active_voice_before_sending_motion(self):
+        events: list[str] = []
+        voice = _FakeVoice(events)
+        xz_app.SESSIONS["dev-dance-voice"] = _FakeSession(voice)
+        xz_app.DANCE.register("dev-dance-voice", _FakeDanceWs(events))
+
+        result = await xz_app._push_default_dance("dev-dance-voice", "happy")
+
+        self.assertTrue(result["sent"])
+        self.assertEqual(events, ["voice-stopped", "dance-pushed"])
+        self.assertIsNone(xz_app.SESSIONS["dev-dance-voice"].voice)
+
+
 if __name__ == "__main__":
     unittest.main()

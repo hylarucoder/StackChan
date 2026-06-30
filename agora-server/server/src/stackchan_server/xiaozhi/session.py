@@ -11,6 +11,7 @@ import asyncio
 import json
 import logging
 import os
+import time
 import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
@@ -39,15 +40,41 @@ class XzSession:
         # filled by later milestones
         self.on_audio_frame: Callable[[bytes], Any] | None = None
         self.on_dance_request: Callable[[str], Awaitable[Any]] | None = None
+        self.before_hello_response: Callable[[], Awaitable[Any]] | None = None
         self.voice = None  # VoiceBridge when M3 voice is started for this session
         self.hello_event = asyncio.Event()  # set once the hello handshake completes
+        self.created_at = time.monotonic()
+        self.last_text_in_at = 0.0
+        self.last_text_out_at = 0.0
+        self.last_audio_in_at = 0.0
+        self.last_audio_out_at = 0.0
+        self.last_listen_state = ""
+        self.last_listen_mode = ""
+        self._text_in_n = 0
+        self._text_out_n = 0
+        self._bin_n = 0
+        self._bytes_out_n = 0
+        self._tts_frame_n = 0
 
     # --- low level send -----------------------------------------------------
     async def send_text(self, obj: dict[str, Any]) -> None:
-        await self.ws.send_text(json.dumps(obj, ensure_ascii=False))
+        payload = json.dumps(obj, ensure_ascii=False)
+        await self.ws.send_text(payload)
+        self._text_out_n += 1
+        self.last_text_out_at = time.monotonic()
+        logger.info(
+            "WS->device text #%d session=%s type=%s state=%s bytes=%d",
+            self._text_out_n,
+            self.session_id,
+            obj.get("type", ""),
+            obj.get("state", ""),
+            len(payload.encode("utf-8")),
+        )
 
     async def send_bytes(self, data: bytes) -> None:
         await self.ws.send_bytes(data)
+        self._bytes_out_n += 1
+        self.last_audio_out_at = time.monotonic()
 
     async def _send_mcp_payload(self, payload: dict[str, Any]) -> None:
         await self.send_text(proto.mcp(self.session_id, payload))
@@ -63,13 +90,29 @@ class XzSession:
         self.state = "listening"
 
     async def begin_tts(self) -> None:
+        logger.info("TTS device-send session=%s text=start", self.session_id)
+        self._tts_frame_n = 0
         await self.send_text(proto.tts_start(self.session_id))
         self.state = "speaking"
 
     async def push_tts_frame(self, opus_frame: bytes) -> None:
+        self._tts_frame_n += 1
+        if self._tts_frame_n <= 3 or self._tts_frame_n % 25 == 0:
+            logger.info(
+                "TTS device-send session=%s audio_frame=%d opus_bytes=%d ws_bytes_out=%d",
+                self.session_id,
+                self._tts_frame_n,
+                len(opus_frame),
+                self._bytes_out_n,
+            )
         await self.send_bytes(proto.encode_audio_v1(opus_frame))
 
     async def end_tts(self) -> None:
+        logger.info(
+            "TTS device-send session=%s text=stop frames=%d",
+            self.session_id,
+            self._tts_frame_n,
+        )
         await self.send_text(proto.tts_stop(self.session_id))
         self.state = "listening"
 
@@ -100,19 +143,44 @@ class XzSession:
             self._closed = True
 
     async def _on_text(self, text: str) -> None:
-        logger.info("WS text<- %s", text[:220])
+        self._text_in_n += 1
+        self.last_text_in_at = time.monotonic()
         try:
             obj = json.loads(text)
         except json.JSONDecodeError:
+            logger.info(
+                "WS<-device text #%d session=%s bad_json bytes=%d preview=%s",
+                self._text_in_n,
+                self.session_id,
+                len(text.encode("utf-8", "ignore")),
+                text[:160],
+            )
             logger.warning("session %s: bad JSON text frame", self.session_id)
             return
         mtype = obj.get("type")
+        logger.info(
+            "WS<-device text #%d session=%s type=%s state=%s mode=%s bytes=%d",
+            self._text_in_n,
+            self.session_id,
+            mtype,
+            obj.get("state", ""),
+            obj.get("mode", ""),
+            len(text.encode("utf-8", "ignore")),
+        )
         if mtype == "hello":
             await self._on_hello(obj)
         elif mtype == "mcp":
             self.mcp.feed(obj.get("payload") or {})
         elif mtype == "listen":
-            logger.info("session %s: listen %s", self.session_id, obj.get("state"))
+            self.last_listen_state = str(obj.get("state", ""))
+            self.last_listen_mode = str(obj.get("mode", ""))
+            logger.info(
+                "TURN state session=%s device_listen=%s mode=%s app_state=%s",
+                self.session_id,
+                self.last_listen_state,
+                self.last_listen_mode,
+                self.state,
+            )
         elif mtype == "abort":
             logger.info("session %s: abort reason=%s", self.session_id, obj.get("reason"))
             await self._on_abort()
@@ -120,10 +188,17 @@ class XzSession:
             logger.debug("session %s: unhandled msg type=%s", self.session_id, mtype)
 
     async def _on_binary(self, data: bytes) -> None:
-        self._bin_n = getattr(self, "_bin_n", 0) + 1
-        if self._bin_n <= 2 or self._bin_n % 100 == 0:
-            logger.info("session %s: device audio frame #%d (%dB) voice=%s",
-                        self.session_id, self._bin_n, len(data), self.on_audio_frame is not None)
+        self._bin_n += 1
+        self.last_audio_in_at = time.monotonic()
+        if self._bin_n <= 3 or self._bin_n % 100 == 0:
+            logger.info(
+                "WS<-device audio session=%s frame=%d opus_bytes=%d voice_bridge=%s state=%s",
+                self.session_id,
+                self._bin_n,
+                len(data),
+                self.on_audio_frame is not None,
+                self.state,
+            )
         if self.on_audio_frame is not None:
             res = self.on_audio_frame(proto.decode_audio_v1(data))
             if asyncio.iscoroutine(res):
@@ -132,9 +207,11 @@ class XzSession:
 
     async def _on_hello(self, obj: dict[str, Any]) -> None:
         self.device_audio = obj.get("audio_params", {}) or {}
+        if self.before_hello_response is not None:
+            await self.before_hello_response()
         await self.send_text(proto.server_hello(self.session_id, self.downlink_sample_rate))
         self.state = "listening"
-        logger.info("session %s: hello from device=%s audio=%s",
+        logger.info("TURN state session=%s hello device=%s audio=%s",
                     self.session_id, self.device_id, self.device_audio)
         self.hello_event.set()
         # MCP discovery in the background so the receive loop keeps draining replies
@@ -154,3 +231,24 @@ class XzSession:
     async def _on_abort(self) -> None:
         # M3+: stop ConvoAI speech + flush downlink. M0: nothing.
         self.state = "listening"
+
+    def debug_snapshot(self) -> dict[str, Any]:
+        now = time.monotonic()
+
+        def age(ts: float) -> float | None:
+            return round(now - ts, 3) if ts else None
+
+        return {
+            "age_seconds": round(now - self.created_at, 3),
+            "text_in": self._text_in_n,
+            "text_out": self._text_out_n,
+            "audio_in_frames": self._bin_n,
+            "audio_out_frames": self._bytes_out_n,
+            "tts_out_frames": self._tts_frame_n,
+            "last_listen_state": self.last_listen_state,
+            "last_listen_mode": self.last_listen_mode,
+            "last_text_in_age": age(self.last_text_in_at),
+            "last_text_out_age": age(self.last_text_out_at),
+            "last_audio_in_age": age(self.last_audio_in_at),
+            "last_audio_out_age": age(self.last_audio_out_at),
+        }

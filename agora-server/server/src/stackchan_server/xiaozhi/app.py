@@ -99,6 +99,7 @@ async def sessions():
                 "state": s.state,
                 "tools": [t.get("name") for t in s.mcp.tools],
                 "dance_channel": DANCE.get(s.device_id) is not None,
+                "debug": s.debug_snapshot(),
             }
             for s in SESSIONS.values()
         ],
@@ -137,35 +138,34 @@ async def ws_endpoint(ws: WebSocket):
     session = XzSession(ws, device_id, client_id)
     session.on_dance_request = lambda style: _push_default_dance(device_id, style)
     SESSIONS[device_id] = session
-    run_task = asyncio.create_task(session.run())
     idle_task = None
-    try:
-        if AUTO_VOICE:
-            # Auto-start voice the moment the device connects (while it's still in
-            # 'listening'), so ConvoAI is in the channel and greets immediately — otherwise
-            # the device idles to a void before we attach the agent.
-            try:
-                await asyncio.wait_for(session.hello_event.wait(), 12)
-                from .voice_bridge import VoiceBridge
-                vb = VoiceBridge(session, asyncio.get_running_loop())
-                session.voice = vb
-                logger.info(
-                    "AUTO-VOICE: starting for device=%s session=%s",
-                    device_id,
-                    session.session_id,
-                )
-                if not await vb.start():
-                    session.voice = None
-                    logger.error("AUTO-VOICE: start failed")
-                elif IDLE_DISCONNECT_SECONDS > 0:
-                    idle_task = asyncio.create_task(
-                        _idle_disconnect_watchdog(session, IDLE_DISCONNECT_SECONDS)
-                    )
-            except asyncio.TimeoutError:
-                logger.warning("AUTO-VOICE: hello not received in 12s; skipping")
-            except Exception:
-                logger.exception("AUTO-VOICE: error")
+
+    async def _start_voice_before_hello_response() -> None:
+        nonlocal idle_task
+        try:
+            from .voice_bridge import VoiceBridge
+            vb = VoiceBridge(session, asyncio.get_running_loop())
+            session.voice = vb
+            logger.info(
+                "AUTO-VOICE: prestarting before server hello device=%s session=%s",
+                device_id,
+                session.session_id,
+            )
+            if not await vb.start():
                 session.voice = None
+                logger.error("AUTO-VOICE: prestart failed")
+            elif IDLE_DISCONNECT_SECONDS > 0:
+                idle_task = asyncio.create_task(
+                    _idle_disconnect_watchdog(session, IDLE_DISCONNECT_SECONDS)
+                )
+        except Exception:
+            logger.exception("AUTO-VOICE: prestart error")
+            session.voice = None
+
+    if AUTO_VOICE:
+        session.before_hello_response = _start_voice_before_hello_response
+    run_task = asyncio.create_task(session.run())
+    try:
         await run_task
     finally:
         if idle_task is not None:
@@ -295,6 +295,17 @@ def _pick_dance_device(device: str | None) -> str:
 
 
 async def _push_default_dance(device_id: str, style: str = "happy") -> dict:
+    session = SESSIONS.get(device_id)
+    if session is not None and session.voice is not None:
+        logger.info(
+            "DANCE stopping voice before motion device=%s session=%s style=%s",
+            device_id,
+            session.session_id,
+            style,
+        )
+        await session.voice.stop()
+        session.voice = None
+
     payload = _current_dance_payload()
     size = await DANCE.push_payload(device_id, payload)
     n_frames = len(json.loads(payload))

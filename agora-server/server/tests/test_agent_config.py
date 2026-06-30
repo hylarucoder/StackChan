@@ -95,7 +95,16 @@ class AgentConfigTest(unittest.TestCase):
         )
 
         self.assertEqual(preset, DEFAULT_AGENT_PRESET)
-        self.assertEqual(properties["turn_detection"]["language"], "zh-CN")
+        # turn_detection must set mode="default" (activates the detailed config) and must
+        # NOT carry a bogus "language" key (language belongs in asr.params, asserted next).
+        self.assertEqual(properties["turn_detection"]["mode"], "default")
+        self.assertNotIn("language", properties["turn_detection"])
+        self.assertEqual(
+            properties["turn_detection"]["config"]["end_of_speech"]["vad_config"][
+                "silence_duration_ms"
+            ],
+            480,
+        )
         self.assertEqual(properties["asr"]["params"]["language"], "zh-CN")
         self.assertIn("system_messages", properties["llm"])
         self.assertEqual(properties["tts"]["params"]["voice_setting"]["voice_id"], "Chinese (Mandarin)_Warm_Girl")

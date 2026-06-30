@@ -3,10 +3,14 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(PROJECT_VER "1.4.2")
-add_definitions(-DFIRMWARE_VERSION=\"${PROJECT_VER}\")
+if(NOT CMAKE_SCRIPT_MODE_FILE)
+    add_definitions(-DFIRMWARE_VERSION=\"${PROJECT_VER}\")
+endif()
 
 # Add this line to disable the specific warning
-add_compile_options(-Wno-missing-field-initializers)
+if(NOT CMAKE_SCRIPT_MODE_FILE)
+    add_compile_options(-Wno-missing-field-initializers)
+endif()
 
 # Auto-load a local sdkconfig overlay (git-ignored) when present. Lets
 # self-hosted / custom deployments pin CONFIG_STACKCHAN_SERVER_URL,
@@ -19,5 +23,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sdkconfig.defaults.local")
     message(STATUS "StackChan: detected sdkconfig.defaults.local, applying overlay")
 endif()
 
-include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(stack-chan)
+if(NOT CMAKE_SCRIPT_MODE_FILE)
+    include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+    project(stack-chan)
+endif()

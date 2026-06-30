@@ -4,7 +4,8 @@ Voice bridge (M3): connect one XiaoZhi device session to Agora + ConvoAI.
 
 Flow:
   device mic Opus(60ms) --WS--> [decode] --PCM--> AgoraMedia.push_pcm --> RTC channel
-  ConvoAI agent TTS --RTC--> AgoraMedia.on_remote_pcm(PCM,10ms) --[reframe 60ms + encode]--> device speaker
+  ConvoAI agent TTS --RTC--> AgoraMedia.on_remote_pcm(PCM,10ms)
+    --[reframe 60ms + encode]--> device speaker
 
 The Agora audio observer fires on a native C thread; we marshal PCM into the asyncio loop
 via loop.call_soon_threadsafe, then an asyncio task reframes -> encodes Opus -> WS, with
@@ -12,6 +13,7 @@ tts/start gating and a silence-gap tts/stop.
 """
 from __future__ import annotations
 
+import array
 import asyncio
 import audioop
 import base64
@@ -19,16 +21,72 @@ import json
 import logging
 import os
 import random
+import subprocess
 import time
 from typing import Optional
 
-from .opus_codec import OpusCodec, FRAME_BYTES
+from .opus_codec import FRAME_BYTES, SAMPLE_RATE, OpusCodec
 from ..agora.media import AgoraMedia
 from ..config import dance_keyword_enabled
 
 logger = logging.getLogger("uvicorn.error")
 
 DOWNLINK_GAP_S = 0.6   # no agent audio for this long -> end the TTS turn
+
+# Downlink smoothing. _downlink_recv drops leading silence, so playout starts at the
+# first LOUD sample -> a hard onset (click/pop) and the device's Opus decoder is still
+# cold, making the first ~second sound abrupt/flaky. Two mitigations:
+#   - PREBUFFER: accumulate a cushion before the first frame (absorbs agent jitter).
+#   - FADE: a short linear gain ramp in at turn start (and out at turn end) so the onset
+#     and tail are gradual instead of a step from/to silence.
+PREBUFFER_MS = int(os.getenv("XZ_DOWNLINK_PREBUFFER_MS", "600"))
+FADE_MS = int(os.getenv("XZ_DOWNLINK_FADE_MS", "80"))
+FADE_SAMPLES = SAMPLE_RATE * FADE_MS // 1000
+
+
+def _fade_in(pcm: bytes, done: int, total: int) -> tuple[bytes, int]:
+    """Linear fade-in: gain rises 0->1 across the first `total` samples of a turn.
+    `done` = samples already ramped in prior frames. Returns (pcm_out, new_done).
+    No-op once done >= total (the steady-state fast path)."""
+    if total <= 0 or done >= total:
+        return pcm, done
+    buf = array.array("h")
+    buf.frombytes(pcm)
+    for i in range(len(buf)):
+        pos = done + i
+        if pos >= total:
+            break
+        buf[i] = (buf[i] * pos) // total
+    return buf.tobytes(), done + len(buf)
+
+
+def _fade_out(pcm: bytes, fade_samples: int, valid_samples: int) -> bytes:
+    """Linear fade-out: gain falls 1->0 across the last `fade_samples` of the real
+    audio (the first `valid_samples` of the frame; any trailing zero padding is left
+    untouched). Used on the final flushed frame of a turn to avoid a tail click."""
+    f = min(fade_samples, valid_samples)
+    if f <= 0:
+        return pcm
+    buf = array.array("h")
+    buf.frombytes(pcm)
+    start = valid_samples - f
+    for k in range(f):
+        buf[start + k] = (buf[start + k] * (f - k)) // (f + 1)
+    return buf.tobytes()
+
+# When set, speak a macOS `say` line the moment the ConvoAI agent actually joins the
+# RTC channel (the real "ready to talk" signal). Helps measure first-turn latency: the
+# gap between voice_bridge_start and this line is how long the cold-start agent took.
+SAY_READY = os.getenv("XZ_SAY_READY", "0") == "1"
+SAY_READY_TEXT = os.getenv("XZ_SAY_READY_TEXT", "可以说话了")
+
+
+def _say(text: str) -> None:
+    """Best-effort, non-blocking macOS `say`. Safe to call from any thread."""
+    try:
+        subprocess.Popen(["say", text])
+    except Exception:
+        logger.exception("say command failed")
 
 # M4: trigger the dance when the user says any of these (the passphrase + variants).
 # This keyword path is one of the XZ_DANCE_TRIGGER modes ("keyword"); the other is the
@@ -67,23 +125,37 @@ class VoiceBridge:
         self._up_last_speech = 0.0   # uplink VAD: last time the user actually spoke
         self._rec = None      # debug: raw recording of agent PCM received from Agora
         self._tx_chunks: dict = {}   # transcript reassembly: msgId -> {chunkIdx: b64}
+        self._last_transcript_key: tuple[str, str] | None = None
+        self._last_transcript_repeats = 0
+        self._start_t = 0.0          # monotonic time start() began, for ready-latency
+        self._agent_joined = False   # has the ConvoAI agent joined the channel yet?
+        self._fade_in_done = 0       # samples already faded in for the current TTS turn
 
     # ---- lifecycle ----
     async def start(self) -> bool:
         from ..agora.agent import Agent
         from agora_agent.agentkit.token import generate_convo_ai_token
 
+        self._start_t = time.monotonic()
         app_id = os.getenv("AGORA_APP_ID")
         app_cert = os.getenv("AGORA_APP_CERTIFICATE")
         token = generate_convo_ai_token(
             app_id=app_id, app_certificate=app_cert,
             channel_name=self.channel, uid=self.user_uid, token_expire=3600,
         )
+        logger.info(
+            "TURN state session=%s voice_bridge_start channel=%s user_uid=%s agent_uid=%s",
+            self.session.session_id,
+            self.channel,
+            self.user_uid,
+            self.agent_uid,
+        )
 
         # 1) media bridge joins as USER_UID
         self.media = AgoraMedia(self.channel, self.user_uid,
                                 on_remote_pcm=self._on_remote_pcm,
-                                on_stream_msg=self._on_stream_msg)
+                                on_stream_msg=self._on_stream_msg,
+                                on_user_joined=self._on_agora_user_joined)
         ok = await self.loop.run_in_executor(None, self.media.connect, token)
         if not ok:
             logger.error("VoiceBridge: media connect failed")
@@ -107,8 +179,15 @@ class VoiceBridge:
             self.agent = await self._agent_obj.start(
                 channel_name=self.channel, agent_uid=self.agent_uid, user_uid=self.user_uid,
             )
-            self.agent_id = self.agent.get("agent_id") if isinstance(self.agent, dict) else self.agent
-            logger.info("VoiceBridge: ConvoAI started agent_id=%s channel=%s", self.agent_id, self.channel)
+            self.agent_id = (
+                self.agent.get("agent_id") if isinstance(self.agent, dict) else self.agent
+            )
+            logger.info(
+                "TURN state session=%s convoai_started agent_id=%s channel=%s",
+                self.session.session_id,
+                self.agent_id,
+                self.channel,
+            )
         except Exception:
             logger.exception("VoiceBridge: ConvoAI start failed (media still up)")
         return True
@@ -132,6 +211,23 @@ class VoiceBridge:
             except Exception:
                 pass
             self._rec = None
+
+    # ---- readiness: the agent joining the channel is the real "ready to talk" signal ----
+    def _on_agora_user_joined(self, user_id: str):
+        # Runs on a native Agora thread. In our 1:1 channel the only remote user is the
+        # ConvoAI agent, so this fires once, when it's actually in the room and listening.
+        if self._agent_joined:
+            return
+        self._agent_joined = True
+        ready_after = time.monotonic() - self._start_t if self._start_t else -1.0
+        logger.info(
+            "TURN state session=%s agent_joined uid=%s ready_after=%.2fs",
+            self.session.session_id,
+            user_id,
+            ready_after,
+        )
+        if SAY_READY:
+            _say(SAY_READY_TEXT)
 
     # ---- M4: ConvoAI transcript (data stream) -> passphrase -> dance ----
     def _on_stream_msg(self, user_id: str, data: bytes):
@@ -171,9 +267,14 @@ class VoiceBridge:
             return
         who = str(obj.get("object", ""))             # user.transcription / assistant.transcription
         text = str(obj.get("text", ""))
-        logger.info("TRANSCRIPT [%s]: %s", who, text)
+        self._log_transcript(msg_id, who, text)
         if "user" in who.lower() and text.strip():
             self._last_user_speech = time.monotonic()
+            logger.info(
+                "TURN state session=%s user_speech_detected text_chars=%d",
+                self.session.session_id,
+                len(text),
+            )
         # M4: trigger only on the USER's words (not the agent echoing the phrase back).
         if (
             dance_keyword_enabled()
@@ -185,6 +286,36 @@ class VoiceBridge:
 
     def last_meaningful_activity_at(self) -> float:
         return max(self._last_user_speech, self._last_voice)
+
+    def _log_transcript(self, msg_id: str, who: str, text: str) -> None:
+        key = (who, text)
+        if key == self._last_transcript_key:
+            self._last_transcript_repeats += 1
+            if self._last_transcript_repeats <= 2 or self._last_transcript_repeats % 10 == 0:
+                logger.info(
+                    "TRANSCRIPT duplicate session=%s repeats=%d msg_id=%s object=%s text=%s",
+                    self.session.session_id,
+                    self._last_transcript_repeats,
+                    msg_id,
+                    who,
+                    text,
+                )
+            return
+        if self._last_transcript_repeats:
+            logger.info(
+                "TRANSCRIPT duplicate-ended session=%s repeats=%d",
+                self.session.session_id,
+                self._last_transcript_repeats,
+            )
+        self._last_transcript_key = key
+        self._last_transcript_repeats = 0
+        logger.info(
+            "TRANSCRIPT session=%s msg_id=%s object=%s text=%s",
+            self.session.session_id,
+            msg_id,
+            who,
+            text,
+        )
 
     async def _safe_dance(self):
         try:
@@ -209,8 +340,16 @@ class VoiceBridge:
                 state = "SPEECH" if rms > 500 else "(quiet)"
             ret = self.media.push_pcm(send) if self.media else None
             self._up_n += 1
-            if self._up_n % 25 == 0:
-                logger.info("UPLINK #%d rms=%d %s push=%s", self._up_n, rms, state, ret)
+            if self._up_n <= 3 or self._up_n % 25 == 0:
+                logger.info(
+                    "UPLINK device->agora session=%s frame=%d pcm_bytes=%d rms=%d state=%s push=%s",
+                    self.session.session_id,
+                    self._up_n,
+                    len(pcm),
+                    rms,
+                    state,
+                    ret,
+                )
         except Exception:
             logger.exception("uplink decode/push error")
 
@@ -219,7 +358,13 @@ class VoiceBridge:
         # called on a native thread; hand to the loop
         self._down_n += 1
         if self._down_n <= 3 or self._down_n % 50 == 0:
-            logger.info("DOWNLINK #%d: agent pcm %dB from Agora", self._down_n, len(pcm))
+            logger.info(
+                "DOWNLINK agora->device session=%s pcm_frame=%d pcm_bytes=%d queued=%d",
+                self.session.session_id,
+                self._down_n,
+                len(pcm),
+                self._down_q.qsize(),
+            )
         self.loop.call_soon_threadsafe(self._down_q.put_nowait, pcm)
 
     # ---- downlink PRODUCER: drain Agora PCM into the jitter buffer (no sleeps here, so the
@@ -255,8 +400,14 @@ class VoiceBridge:
                 else:
                     dropped += 1
                 if recv % 50 == 0:
-                    logger.info("RECV #%d rms=%d jitter=%dms dropped=%d",
-                                recv, rms, (len(self._jitter) // FRAME_BYTES) * 60, dropped)
+                    logger.info(
+                        "DOWNLINK buffer session=%s recv=%d rms=%d jitter_ms=%d dropped_silence=%d",
+                        self.session.session_id,
+                        recv,
+                        rms,
+                        (len(self._jitter) // FRAME_BYTES) * 60,
+                        dropped,
+                    )
                     if self._rec:
                         try:
                             self._rec.flush()
@@ -269,7 +420,8 @@ class VoiceBridge:
 
     # ---- downlink CONSUMER: play exactly one 60ms frame every 60ms (steady real-time) ----
     async def _downlink_send(self):
-        PREBUFFER = FRAME_BYTES * 8   # ~480ms cushion before starting, to absorb agent jitter
+        # cushion before starting playout, rounded to whole 60ms frames (>=1)
+        PREBUFFER = FRAME_BYTES * max(1, PREBUFFER_MS // 60)
         underruns = 0
         next_t = time.monotonic()
         try:
@@ -283,18 +435,32 @@ class VoiceBridge:
                 have = len(self._jitter)
                 if have >= FRAME_BYTES and (self._tts_active or have >= PREBUFFER):
                     if not self._tts_active:
-                        logger.info("TTS-> device: begin (agent speaking)")
+                        logger.info(
+                            "TTS device-send session=%s begin prebuffer_ms=%d",
+                            self.session.session_id,
+                            (have // FRAME_BYTES) * 60,
+                        )
                         await self.session.begin_tts()
                         self._tts_active = True
-                    frame = bytes(self._jitter[:FRAME_BYTES]); del self._jitter[:FRAME_BYTES]
+                        self._fade_in_done = 0   # ramp this turn in from silence
+                    frame = bytes(self._jitter[:FRAME_BYTES])
+                    del self._jitter[:FRAME_BYTES]
+                    if self._fade_in_done < FADE_SAMPLES:
+                        frame, self._fade_in_done = _fade_in(
+                            frame, self._fade_in_done, FADE_SAMPLES)
                     await self.session.push_tts_frame(self.enc.encode(frame))
                 elif self._tts_active and have < FRAME_BYTES \
                         and (time.monotonic() - self._last_voice) > DOWNLINK_GAP_S:
-                    if have:                      # flush a final partial frame
+                    if have:                      # flush a final partial frame, faded out
                         frame = bytes(self._jitter) + b"\x00" * (FRAME_BYTES - have)
                         del self._jitter[:]
+                        frame = _fade_out(frame, FADE_SAMPLES, have // 2)
                         await self.session.push_tts_frame(self.enc.encode(frame))
-                    logger.info("TTS-> device: end (silence -> back to listening)")
+                    logger.info(
+                        "TTS device-send session=%s end reason=silence gap_s=%.3f",
+                        self.session.session_id,
+                        time.monotonic() - self._last_voice,
+                    )
                     await self.session.end_tts()
                     self._tts_active = False
                 elif self._tts_active:
@@ -302,7 +468,11 @@ class VoiceBridge:
                     # silence frame to keep playout continuous (prevents device-side skips).
                     underruns += 1
                     if underruns % 15 == 1:
-                        logger.info("downlink underrun #%d (jitter empty mid-turn) -> silence frame", underruns)
+                        logger.info(
+                            "DOWNLINK underrun session=%s count=%d action=silence_frame",
+                            self.session.session_id,
+                            underruns,
+                        )
                     await self.session.push_tts_frame(self.enc.encode(b"\x00" * FRAME_BYTES))
         except asyncio.CancelledError:
             pass

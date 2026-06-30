@@ -91,6 +91,11 @@ class _ConnObserver(IRTCConnectionObserver):
 
     def on_user_joined(self, agora_rtc_conn, user_id):
         logger.info("[agora] remote user joined: %s", user_id)
+        if self.media.on_user_joined is not None:
+            try:
+                self.media.on_user_joined(str(user_id))
+            except Exception:
+                logger.exception("[agora] on_user_joined callback error")
 
     def on_user_left(self, agora_rtc_conn, user_id, reason):
         logger.info("[agora] remote user left: %s", user_id)
@@ -142,11 +147,15 @@ class AgoraMedia:
 
     def __init__(self, channel: str, user_uid: int,
                  on_remote_pcm: Optional[Callable[[bytes], None]] = None,
-                 on_stream_msg: Optional[Callable[[str, bytes], None]] = None):
+                 on_stream_msg: Optional[Callable[[str, bytes], None]] = None,
+                 on_user_joined: Optional[Callable[[str], None]] = None):
         self.channel = channel
         self.user_uid = user_uid
         self.on_remote_pcm = on_remote_pcm
         self.on_stream_msg = on_stream_msg
+        # Fires when a remote user joins the channel. In our 1:1 topology the only
+        # remote user is the ConvoAI agent, so this is the real "ready to talk" signal.
+        self.on_user_joined = on_user_joined
         self._connected = threading.Event()
         self._conn = None
         self._conn_obs = None

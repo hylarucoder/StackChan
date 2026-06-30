@@ -15,6 +15,7 @@ def transcript_frame(who: str, text: str) -> bytes:
 
 class _FakeSession:
     def __init__(self):
+        self.session_id = "session-voice-dance"
         self.dances: list[str] = []
 
     async def trigger_dance(self, style: str = "happy"):
